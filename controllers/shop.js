@@ -8,7 +8,8 @@ exports.getProducts = (req, res, next) => {
         docTitle: "All Products",
         path: "/products",
         hasProducts: products.length > 0,
-        actvieShop: true
+        actvieShop: true,
+        isAuthenticated: req.isLoggedIn
       });
     })
     .catch(err => {
@@ -21,16 +22,28 @@ exports.getProduct = (req, res, next) => {
   //Product.findAll({ where: { id: prodId } }).then().catch(;)
 
   Product.findByPk(req.params.productId).then(product => {
-    res.render("shop/product-detail", { path: "/products", docTitle: product.title, product: product }).catch(err => {
-      console.log(err);
-    });
+    res
+      .render("shop/product-detail", {
+        path: "/products",
+        docTitle: product.title,
+        product: product,
+        isAuthenticated: req.isLoggedIn
+      })
+      .catch(err => {
+        console.log(err);
+      });
   });
 };
 
 exports.getIndex = (req, res, next) => {
   Product.findAll()
     .then(products => {
-      res.render("shop/index", { prods: products, docTitle: "Shop", path: "/" });
+      res.render("shop/index", {
+        prods: products,
+        docTitle: "Shop",
+        path: "/",
+        isAuthenticated: req.isLoggedIn
+      });
     })
     .catch(err => {
       console.log(err);
@@ -47,7 +60,8 @@ exports.getCart = (req, res, next) => {
           res.render("shop/cart", {
             path: "/cart",
             docTitle: "Cart",
-            products: products
+            products: products,
+            isAuthenticated: req.isLoggedIn
           });
         })
         .catch(err => {
@@ -147,7 +161,8 @@ exports.getOrders = (req, res, next) => {
       res.render("shop/orders", {
         path: "/orders",
         docTitle: "Your Orders",
-        orders: orders
+        orders: orders,
+        isAuthenticated: req.isLoggedIn
       });
     })
     .catch(err => console.log(err));

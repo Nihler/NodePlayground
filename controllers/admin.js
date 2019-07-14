@@ -5,7 +5,8 @@ exports.getAddProduct = (req, res, next) => {
     docTitle: "Add Product",
     path: "admin/edit-product",
     activeAddProduct: true,
-    editing: false
+    editing: false,
+    isAuthenticated: req.isLoggedIn
   });
 };
 
@@ -31,7 +32,8 @@ exports.getEditProduct = (req, res, next) => {
       path: req.originalUrl,
       activeAddProduct: true,
       editing: editMode,
-      product: product
+      product: product,
+      isAuthenticated: req.isLoggedIn
     });
   });
 };
@@ -73,7 +75,8 @@ exports.getProducts = (req, res, next) => {
         docTitle: "All Products",
         path: "/admin/products",
         hasProducts: products.length > 0,
-        actvieShop: true
+        actvieShop: true,
+        isAuthenticated: req.isLoggedIn
       });
     })
     .catch(err => {

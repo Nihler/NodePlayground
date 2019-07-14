@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
+const session = require("express-session");
 
 const sequelize = require("./helpers/database");
 const adminRoutes = require("./routes/admin");
@@ -26,6 +27,7 @@ app.set("views", "views");
 
 app.use(bodyParser.urlencoded()); //służy do parsowania requestow
 app.use(express.static(path.join(__dirname, "public"))); //udostepnia folder public do odczytu dla usera, co pozwala na wczytywanie css
+app.use(session({ secret: "my secret", resave: false, saveUninitialized: false }));
 
 app.use((req, res, next) => {
   User.findByPk(1)
