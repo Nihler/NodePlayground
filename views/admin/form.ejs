@@ -5,38 +5,43 @@
   <%- include('../includes/nav-left.ejs') %>
 
 
-    <form class="product-form" action="/<% if (false) { %>edit-worker<% } else { %>add-worker<% } %>"
+    <form class="product-form" action="/<% if (isEdit) { %>edit-worker<% } else { %>add-worker<% } %>"
       method="POST">
 
       <div class="form-control">
         <label for="imie">Imie</label>
-        <input type="text" name="imie" id="imie" value="">
+        <input type="text" name="imie" id="imie" value="<%if(isEdit && worker) { %> <%= worker.name %> <% } %>">
       </div>
       <div class="form-control">
         <label for="nazwisko">Nazwisko</label>
-        <input type="text" name="nazwisko" id="nazwisko" value="">
+        <input type="text" name="nazwisko" id="nazwisko" value="<%if(isEdit && worker) { %> <%= worker.surname %> <% } %>">
       </div>
       <div class="form-control">
         <label for="plec">Płeć</label>
         <label>
-        <input type="radio" name="plec" id="plec" value="kobieta"> kobieta
+        <input type="radio" name="plec" id="plec" value="kobieta" <%if(isEdit && worker&& worker.sex == "kobieta") { %> checked <% } %> > kobieta
         </label><br>
         <label>
-        <input type="radio" name="plec" id="plec" value="mezczyzna"> mężczyzna
+        <input type="radio" name="plec" id="plec" value="mezczyzna" <%if(isEdit && worker && worker.sex == "mezczyzna") { %> checked <% } %> > mężczyzna
         </label>
       </div>
       <div class="form-control">
         <label for="panienskie">Nazwisko panienskie</label>
-        <input type="text" name="panienskie" id="panienskie" value="">
+        <input type="text" name="panienskie" id="panienskie" value="<%if(isEdit && worker) { %> <%= worker.surname2 %> <% } %>">
       </div>
       <div class="form-control">
         <label for="email">Email</label>
-        <input type="email" name="email" id="email" value="">
+        <input type="email" name="email" id="email" value="<%if(isEdit && worker) { %> <%= worker.email %> <% } %>">
       </div>
       <div class="form-control">
         <label for="kod">Kod pocztowy</label>
-        <input type="text" name="kod" id="kod" value="" pattern="[0-9]{2}-[0-9]{3}" title="Kod pocztowy w formie 00-000">
+        <input type="text" name="kod" id="kod" value="<%if(isEdit && worker) { %> <%= worker.postal %> <% } %>" pattern="[ ][0-9]{2}-[0-9]{3}[ ]" title="Kod pocztowy w formie 00-000">
       </div>
+
+            <% if (isEdit) { %>
+            <input type="hidden" value="<%= worker.id %>" name="workerId" id="workerId">
+            <% } %>
+
       <button class="btn" type="submit">Wyślij</button>
     </form>
 

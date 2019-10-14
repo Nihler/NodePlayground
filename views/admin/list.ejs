@@ -6,6 +6,7 @@
         <% if(workersList.length > 0) {%>
   <table>
     <tr>
+      <% if(isEdit || isDelete) { %><td></td><%} %>
       <td>Id</td>
       <td>Imię</td>
       <td>Nazwisko</td>
@@ -17,6 +18,15 @@
 
           <% workersList.forEach(w =>  {%>
             <tr>
+              <% if(isEdit || isDelete) { %>
+                <td>
+                <%if(isEdit) { %>
+                  <a href="/edit-worker/<%= w.id %>">Edytuj</a>
+                <% } else if(isDelete) { %>
+                  <a href="/delete-worker/<%= w.id %>">Usuń</a>
+                <% } %>
+                </td>
+              <%} %>
               <td><%= w.id %></td>
               <td><%= w.name %></td>
               <td><%= w.surname %></td>

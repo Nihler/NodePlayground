@@ -5,7 +5,7 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getForm = (req, res, next) => {
-  res.render("admin/form", {});
+  res.render("admin/form", { isEdit: false });
 };
 
 exports.getSessionData = (req, res, next) => {
@@ -76,6 +76,64 @@ exports.searchWorker = (req, res, next) => {
     });
   });
 };
+
+exports.getEditWorker = (req, res, next) => {
+  const worker = Worker.findOne({
+    where: {
+      id: req.params.workerId
+    }
+  })
+    .then(result => {
+      res.render("admin/form", {
+        worker: result,
+        isEdit: true
+      });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+exports.postEditWorker = (req, res, next) => {
+  const workerId = req.body.workerId;
+  console.log(workerId);
+  const worker = Worker.findOne({
+    where: {
+      id: workerId
+    }
+  })
+    .then(worker => {
+      console.log("worker " + worker);
+      console.log(req.body);
+      worker.name = req.body.imie;
+      worker.surname = req.body.nazwisko;
+      worker.surname2 = req.body.panienskie;
+      worker.sex = req.body.plec;
+      worker.email = req.body.email;
+      worker.postal = req.body.kod;
+      return worker.save();
+    })
+    .then(result => {
+      console.log("UPDATED PRODUCT");
+      res.redirect("/get-workers-edit");
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+exports.getDeleteWorker = (req, res, next) => {
+  const workerId = req.params.workerId;
+  Worker.destroy({ where: { id: workerId } })
+    .then(result => {
+      res.redirect("/get-workers-delete");
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+exports.postDeleteWorker = (req, res, next) => {};
 
 exports.getAddProduct = (req, res, next) => {
   res.render("admin/edit-product", {

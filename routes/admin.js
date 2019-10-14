@@ -18,8 +18,16 @@ router.get("/get-workers", adminController.getWorkers);
 
 router.get("/get-workers-edit", adminController.getWorkersEdit);
 
+router.get("/get-workers-delete", adminController.getWorkersDelete);
+
+router.get("/edit-worker/:workerId", adminController.getEditWorker);
+
+router.get("/delete-worker/:workerId", adminController.getDeleteWorker);
+
 //POST
-router.post("/edit-worker");
+router.post("/edit-worker", adminController.postEditWorker);
+
+router.post("/delete-worker", adminController.postDeleteWorker);
 
 router.post("/add-worker", adminController.addWorker);
 
