@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 
 const sequelize = require("../helpers/database");
 
-const User = sequelize.define("user", {
+const Worker = sequelize.define("worker", {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -10,7 +10,11 @@ const User = sequelize.define("user", {
     primaryKey: true
   },
   name: Sequelize.STRING,
-  email: Sequelize.STRING
+  surname: Sequelize.STRING,
+  email: Sequelize.STRING,
+  sex: Sequelize.STRING,
+  surname2: Sequelize.STRING,
+  postal: Sequelize.STRING
 });
 
-module.exports = User;
+module.exports = Worker;

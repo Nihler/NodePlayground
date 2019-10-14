@@ -1,0 +1,35 @@
+<%- include('../includes/head.ejs') %>
+</head>
+
+
+  <%- include('../includes/nav-left.ejs') %>
+        <% if(workersList.length > 0) {%>
+  <table>
+    <tr>
+      <td>Id</td>
+      <td>Imię</td>
+      <td>Nazwisko</td>
+      <td>Płec</td>
+      <td>Naz. pan.</td>
+      <td>Email</td>
+      <td>Kod</td>
+    </tr>
+
+          <% workersList.forEach(w =>  {%>
+            <tr>
+              <td><%= w.id %></td>
+              <td><%= w.name %></td>
+              <td><%= w.surname %></td>
+              <td><%= w.sex %></td>
+              <td><%= w.surname2 %></td>
+              <td><%= w.email %></td>
+              <td><%= w.postal %></td>
+            </tr>
+          <% })%>
+
+  </table>
+        <% } else { %>
+          <h2>NIE MA REKORDÓW SPEŁNIAJĄCYCH WARUNEK</h2>
+        <% } %>
+  <%- include('../includes/nav-right.ejs') %>
+  <%- include('../includes/end.ejs') %>

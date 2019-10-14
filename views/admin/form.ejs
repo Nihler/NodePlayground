@@ -1,0 +1,45 @@
+<%- include('../includes/head.ejs') %>
+</head>
+
+
+  <%- include('../includes/nav-left.ejs') %>
+
+
+    <form class="product-form" action="/<% if (false) { %>edit-worker<% } else { %>add-worker<% } %>"
+      method="POST">
+
+      <div class="form-control">
+        <label for="imie">Imie</label>
+        <input type="text" name="imie" id="imie" value="">
+      </div>
+      <div class="form-control">
+        <label for="nazwisko">Nazwisko</label>
+        <input type="text" name="nazwisko" id="nazwisko" value="">
+      </div>
+      <div class="form-control">
+        <label for="plec">Płeć</label>
+        <label>
+        <input type="radio" name="plec" id="plec" value="kobieta"> kobieta
+        </label><br>
+        <label>
+        <input type="radio" name="plec" id="plec" value="mezczyzna"> mężczyzna
+        </label>
+      </div>
+      <div class="form-control">
+        <label for="panienskie">Nazwisko panienskie</label>
+        <input type="text" name="panienskie" id="panienskie" value="">
+      </div>
+      <div class="form-control">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" value="">
+      </div>
+      <div class="form-control">
+        <label for="kod">Kod pocztowy</label>
+        <input type="text" name="kod" id="kod" value="" pattern="[0-9]{2}-[0-9]{3}" title="Kod pocztowy w formie 00-000">
+      </div>
+      <button class="btn" type="submit">Wyślij</button>
+    </form>
+
+
+  <%- include('../includes/nav-right.ejs') %>
+  <%- include('../includes/end.ejs') %>

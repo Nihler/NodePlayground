@@ -8,17 +8,21 @@ const adminController = require("../controllers/admin");
 const router = express.Router();
 
 //GET
-router.get("/add-product", adminController.getAddProduct);
+router.get("/", adminController.getIndex);
 
-router.get("/edit-product/:productId", adminController.getEditProduct);
+router.get("/form", adminController.getForm);
 
-router.get("/products", adminController.getProducts);
+router.get("/session", adminController.getSessionData);
+
+router.get("/get-workers", adminController.getWorkers);
+
+router.get("/get-workers-edit", adminController.getWorkersEdit);
 
 //POST
-router.post("/add-product", adminController.postAddProduct);
+router.post("/edit-worker");
 
-router.post("/edit-product", adminController.postEditProduct);
+router.post("/add-worker", adminController.addWorker);
 
-router.post("/delete-product", adminController.postDeleteProduct);
+router.post("/search", adminController.searchWorker);
 
 module.exports = router;
