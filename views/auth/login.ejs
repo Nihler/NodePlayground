@@ -1,0 +1,21 @@
+<%- include('../includes/head.ejs') %>
+</head>
+
+
+<%- include('../includes/nav-left.ejs') %>
+
+    <main>
+        <form class="login-form" action="/login"  method="POST">
+            <div class="form-control">
+                <label for="login">login</label>
+                <input type="text" name="login" id="login" >
+            </div>
+            <div class="form-control">
+                <label for="password">hasło</label>
+                <input type="password" name="password" id="password">
+            </div>
+            <button class="btn" type="submit">Login</button>
+        </form>
+    </main>
+<%- include('../includes/nav-right.ejs') %>
+<%- include('../includes/end.ejs') %>

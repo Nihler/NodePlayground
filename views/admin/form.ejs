@@ -35,7 +35,7 @@
       </div>
       <div class="form-control">
         <label for="kod">Kod pocztowy</label>
-        <input type="text" name="kod" id="kod" value="<%if(isEdit && worker) { %> <%= worker.postal %> <% } %>" pattern="[ ][0-9]{2}-[0-9]{3}[ ]" title="Kod pocztowy w formie 00-000">
+        <input type="text" name="kod" id="kod" value="<%if(isEdit && worker) { %> <%= worker.postal %> <% } %>" pattern="[0-9]{2}-[0-9]{3}" title="Kod pocztowy w formie 00-000">
       </div>
 
             <% if (isEdit) { %>

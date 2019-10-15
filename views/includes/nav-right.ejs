@@ -5,4 +5,15 @@
       <input type="text" name="engine" id="engine">
     <button class="btn" type="submit">Wyślij</button>
   </form>
+  <br>
+
+  <% if(isLoggedIn) {%> 
+      <a href="/logout">Wyloguj sie</a>
+      <br>
+      <!-- <a href="/login">Zaloguj sie</a> -->
+  <% } else { %>
+      <a href="/login">Zaloguj sie</a>
+  <% } %>
 </div>
+
+

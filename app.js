@@ -21,26 +21,36 @@ app.set("view engine", "ejs"); //dodanie template engine
 app.set("views", "views");
 
 //middlewary - czyli funkcje kazde zadanie wywoluje
+function authorization(req, res, next) {
+  if (!req.session) {
+    req.isLoggedIn = false;
+  } else {
+    req.isLoggedIn = true;
+  }
+  next();
+}
+
+app.use("*", authorization);
 
 app.use(bodyParser.urlencoded()); //służy do parsowania requestow
 app.use(express.static(path.join(__dirname, "public"))); //udostepnia folder public do odczytu dla usera, co pozwala na wczytywanie css
 //UStawienia sesji
-// app.use(cookieParser());
-// app.use(
-//   session({
-//     secret: "keyboard cat",
-//     store: new SequelizeStore({
-//       db: sequelize
-//     }),
-//     resave: false, // we support the touch method so per the express-session docs this should be set to false
-//     proxy: true // if you do SSL outside of node.
-//   })
-// );
+app.use(cookieParser());
+app.use(
+  session({
+    secret: "keyboard cat",
+    store: new SequelizeStore({
+      db: sequelize
+    }),
+    resave: false, // we support the touch method so per the express-session docs this should be set to false
+    proxy: true // if you do SSL outside of node.
+  })
+);
 
 //deklaracja sciezek dla url
 
 app.use(adminRoutes);
-
+app.use(authRoutes);
 app.use(errorController.get404);
 
 //Relacje w bazie danych

@@ -1,15 +1,19 @@
 const Worker = require("../models/worker");
 
 exports.getIndex = (req, res, next) => {
-  res.render("admin/index", {});
+  let temp = false;
+  if (req.session.user) temp = req.session.user.level;
+  res.render("admin/index", {
+    isLoggedIn: temp
+  });
 };
 
 exports.getForm = (req, res, next) => {
-  res.render("admin/form", { isEdit: false });
+  res.render("admin/form", { isEdit: false, isLoggedIn: req.session.user.level > 0 });
 };
 
 exports.getSessionData = (req, res, next) => {
-  res.render("admin/form", {});
+  res.render("admin/form", { isLoggedIn: req.session.user.level > 0 });
 };
 
 exports.getWorkers = (req, res, next) => {
@@ -17,7 +21,8 @@ exports.getWorkers = (req, res, next) => {
     res.render("admin/list", {
       workersList: workers,
       isEdit: false,
-      isDelete: false
+      isDelete: false,
+      isLoggedIn: req.session.user.level > 0
     });
   });
 };
@@ -27,7 +32,8 @@ exports.getWorkersEdit = (req, res, next) => {
     res.render("admin/list", {
       workersList: workers,
       isEdit: true,
-      isDelete: false
+      isDelete: false,
+      isLoggedIn: req.session.user.level > 0
     });
   });
 };
@@ -37,7 +43,8 @@ exports.getWorkersDelete = (req, res, next) => {
     res.render("admin/list", {
       workersList: workers,
       isEdit: false,
-      isDelete: true
+      isDelete: true,
+      isLoggedIn: req.session.user.level > 0
     });
   });
 };
@@ -72,7 +79,8 @@ exports.searchWorker = (req, res, next) => {
     res.render("admin/list", {
       workersList: result,
       isEdit: false,
-      isDelete: false
+      isDelete: false,
+      isLoggedIn: req.session.user.level > 0
     });
   });
 };
@@ -86,7 +94,8 @@ exports.getEditWorker = (req, res, next) => {
     .then(result => {
       res.render("admin/form", {
         worker: result,
-        isEdit: true
+        isEdit: true,
+        isLoggedIn: req.session.user.level > 0
       });
     })
     .catch(err => {
