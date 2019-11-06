@@ -26,5 +26,7 @@ router.post("/edit-product", adminController.postEditProduct);
 router.post("/delete-product", adminController.postDeleteProduct);
 
 router.post("/newOrder", tempController.newOrder);
+router.post("/next", tempController.activateOrder);
+router.post("/finish/:orderId", tempController.finishOrder);
 
 module.exports = router;
