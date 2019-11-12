@@ -22,7 +22,7 @@ app.set("views", "views");
 
 //middlewary - czyli funkcje kazde zadanie wywoluje
 function authorization(req, res, next) {
-  if (!req.session) {
+  if (!req) {
     req.isLoggedIn = false;
   } else {
     req.isLoggedIn = true;
@@ -49,8 +49,8 @@ app.use(
 
 //deklaracja sciezek dla url
 
-app.use(adminRoutes);
 app.use(authRoutes);
+app.use(adminRoutes);
 app.use(errorController.get404);
 
 //Relacje w bazie danych

@@ -3,13 +3,19 @@ const Worker = require("../models/worker");
 exports.getIndex = (req, res, next) => {
   let temp = false;
   if (req.session.user) temp = req.session.user.level;
+  console.log("=========================================");
+  console.log(req.session.user);
+  console.log("=========================================");
   res.render("admin/index", {
     isLoggedIn: temp
   });
 };
 
 exports.getForm = (req, res, next) => {
-  res.render("admin/form", { isEdit: false, isLoggedIn: req.session.user.level > 0 });
+  res.render("admin/form", {
+    isEdit: false,
+    isLoggedIn: req.session.user.level > 0
+  });
 };
 
 exports.getSessionData = (req, res, next) => {
@@ -150,7 +156,7 @@ exports.getAddProduct = (req, res, next) => {
     path: "admin/edit-product",
     activeAddProduct: true,
     editing: false,
-    isAuthenticated: req.session.isLoggedIn
+    isAuthenticated: req.isLoggedIn
   });
 };
 
@@ -177,7 +183,7 @@ exports.getEditProduct = (req, res, next) => {
       activeAddProduct: true,
       editing: editMode,
       product: product,
-      isAuthenticated: req.session.isLoggedIn
+      isAuthenticated: req.isLoggedIn
     });
   });
 };
@@ -205,7 +211,8 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.postDeleteProduct = (req, res, next) => {
-  const prodId = req.body.productId || req.params.productId || req.query.productId;
+  const prodId =
+    req.body.productId || req.params.productId || req.query.productId;
   Product.destroy({ where: { id: prodId } });
   res.redirect("/products");
 };
@@ -220,7 +227,7 @@ exports.getProducts = (req, res, next) => {
         path: "/admin/products",
         hasProducts: products.length > 0,
         actvieShop: true,
-        isAuthenticated: req.session.isLoggedIn
+        isAuthenticated: req.isLoggedIn
       });
     })
     .catch(err => {

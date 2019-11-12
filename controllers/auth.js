@@ -1,10 +1,15 @@
 const User = require("../models/user");
 
 exports.getLogin = (req, res, next) => {
+  console.log("====================LOGIN=====================");
+  console.log(req.session);
+  console.log(req.session.user);
+  console.log(req.session.test);
+  console.log("=========================================");
   res.render("auth/login", {
     path: "/login",
     docTitle: "Login",
-    isLoggedIn: req.isLoggedIn
+    isLoggedIn: false
   });
 };
 
@@ -16,12 +21,19 @@ exports.postLogin = (req, res, next) => {
   })
     .then(user => {
       console.log(user.get("id"));
-      req.session.user = user;
-      // req.session.user.id = user.get("id");
-      // req.session.user.login = user.get("login");
-      // //req.session.user.password = user.get("password");
-      // req.session.user.level = user.get("level");
+      req.session.test = true;
+      req.session.user = {};
+      req.session.user.id = user.get("id");
+      req.session.user.login = user.get("login");
+      req.session.user.password = user.get("password");
+      req.session.user.level = user.get("level");
       req.session.user.isLoggedIn = true;
+      console.log("=========================================");
+      console.log(req.session);
+      console.log(req.session.user);
+      console.log(req.session.test);
+      console.log("=========================================");
+
       res.redirect("/");
     })
     .catch(err => {
