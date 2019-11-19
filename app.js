@@ -21,17 +21,6 @@ app.set("view engine", "ejs"); //dodanie template engine
 app.set("views", "views");
 
 //middlewary - czyli funkcje kazde zadanie wywoluje
-function authorization(req, res, next) {
-  if (!req) {
-    req.isLoggedIn = false;
-  } else {
-    req.isLoggedIn = true;
-  }
-  next();
-}
-
-app.use("*", authorization);
-
 app.use(bodyParser.urlencoded()); //służy do parsowania requestow
 app.use(express.static(path.join(__dirname, "public"))); //udostepnia folder public do odczytu dla usera, co pozwala na wczytywanie css
 //UStawienia sesji
