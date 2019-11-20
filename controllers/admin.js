@@ -182,7 +182,7 @@ exports.addWorker = (req, res, next) => {
   })
     .save()
     .then(result => {
-      res.redirect("/get-workers");
+      res.redirect("/get-workers/0");
     })
     .catch(err => {
       console.log(err);
