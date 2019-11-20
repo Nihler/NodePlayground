@@ -3,6 +3,18 @@ const Users = require("../models/user");
 const sequelize = require("../helpers/database");
 const Op = sequelize.Op;
 
+const paginate = (query, page) => {
+  const pageSize = 10;
+  const offset = page * pageSize;
+  const limit = offset + pageSize;
+
+  return {
+    ...query,
+    offset,
+    limit
+  };
+};
+
 exports.getIndex = (req, res, next) => {
   let temp = 0;
   if (req.session.user) temp = req.session.user.level;
@@ -32,17 +44,21 @@ exports.getForm = (req, res, next) => {
 exports.getUsers = (req, res, next) => {
   let temp = 0;
   if (req.session.user) temp = req.session.user.level;
-
-  Users.findAll({
-    where: {
-      level: {
-        [Op.lt]: [4]
-      }
-    }
-  }).then(users => {
+  const page = req.param.page || 1;
+  Users.findAll(
+    paginate({
+      where: {
+        level: {
+          [Op.lt]: [4]
+        }
+      },
+      page
+    })
+  ).then(users => {
     res.render("admin/delete-user", {
       usersList: users,
-      level: temp
+      level: temp,
+      page: page + 1
     });
   });
 };
@@ -113,13 +129,15 @@ exports.getSessionData = (req, res, next) => {
 exports.getWorkers = (req, res, next) => {
   let temp = 0;
   if (req.session.user) temp = req.session.user.level;
+  const page = req.params.page || 0;
 
-  Worker.findAll().then(workers => {
+  Worker.findAll(paginate({ where: {} }, page)).then(workers => {
     res.render("admin/list", {
       workersList: workers,
       isEdit: false,
       isDelete: false,
-      level: temp
+      level: temp,
+      page: page
     });
   });
 };
@@ -128,12 +146,14 @@ exports.getWorkersEdit = (req, res, next) => {
   let temp = 0;
   if (req.session.user) temp = req.session.user.level;
 
-  Worker.findAll().then(workers => {
+  const page = req.params.page || 0;
+  Worker.findAll(paginate({ where: {} }, page)).then(workers => {
     res.render("admin/list", {
       workersList: workers,
       isEdit: true,
       isDelete: false,
-      level: temp
+      level: temp,
+      page: page
     });
   });
 };
@@ -142,12 +162,14 @@ exports.getWorkersDelete = (req, res, next) => {
   let temp = 0;
   if (req.session.user) temp = req.session.user.level;
 
-  Worker.findAll().then(workers => {
+  const page = req.params.page || 0;
+  Worker.findAll(paginate({ where: {} }, page)).then(workers => {
     res.render("admin/list", {
       workersList: workers,
       isEdit: false,
       isDelete: true,
-      level: temp
+      level: temp,
+      page: page
     });
   });
 };
@@ -176,6 +198,7 @@ exports.searchWorker = (req, res, next) => {
   let temp = 0;
   if (req.session.user) temp = req.session.user.level;
 
+  const page = req.params.page || 0;
   console.log(req.body);
   Worker.findAll({
     where: {
@@ -186,7 +209,8 @@ exports.searchWorker = (req, res, next) => {
       workersList: result,
       isEdit: false,
       isDelete: false,
-      level: temp
+      level: temp,
+      page: 0
     });
   });
 };

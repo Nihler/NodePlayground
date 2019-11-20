@@ -38,8 +38,24 @@
           <% })%>
 
   </table>
-        <% } else { %>
-          <h2>NIE MA REKORDÓW SPEŁNIAJĄCYCH WARUNEK</h2>
+  <% if(isEdit) { %>
+    <a href="/get-workers-edit/<%= page-1 %>"><-</a>
+  <% }else if (isDelete) { %>
+<a href="/get-workers-delete/<%= page-1 %>"><-</a>
+    <% } else { %>
+      <a href="/get-workers/<%= page-1 %>"><-</a>
+      
+  <% } %>
+  <%=page%>
+    <% if(isEdit) { %>
+    <a href="/get-workers-edit/<%= page+1 %>">-></a> 
+    <% }else if (isDelete) { %>
+       <a href="/get-workers-delete/<%= page+1 %>">-></a> 
+       <% } else { %> 
+        <a href="/get-workers/<%= page+1 %>">-></a> 
         <% } %>
+  <% } else { %>
+    <h2>NIE MA REKORDÓW SPEŁNIAJĄCYCH WARUNEK</h2>
+  <% } %>
   <%- include('../includes/nav-right.ejs') %>
   <%- include('../includes/end.ejs') %>
