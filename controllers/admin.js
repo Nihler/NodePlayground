@@ -159,12 +159,14 @@ exports.getWorkersDelete = (req, res, next) => {
   let temp = 0;
   if (req.session.user) temp = req.session.user.level;
 
+  const page = req.params.page || 0;
   Worker.findAll().then(workers => {
     res.render("admin/list", {
       workersList: workers,
       isEdit: false,
       isDelete: true,
-      level: temp
+      level: temp,
+      page: parseInt(page)
     });
   });
 };
@@ -263,7 +265,7 @@ exports.getDeleteWorker = (req, res, next) => {
   const workerId = req.params.workerId;
   Worker.destroy({ where: { id: workerId } })
     .then(result => {
-      res.redirect("/get-workers-delete");
+      res.redirect("/get-workers-delete/0");
     })
     .catch(err => {
       console.log(err);
