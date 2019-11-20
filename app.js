@@ -12,7 +12,6 @@ const authRoutes = require("./routes/auth");
 
 const errorController = require("./controllers/error");
 
-
 const Worker = require("./models/worker");
 
 const app = express();
@@ -59,7 +58,7 @@ app.use(errorController.get404);
 sequelize
   .sync()
   .then(cart => {
-    app.listen(3001);
+    app.listen(process.env.PORT || 3001);
   })
   .catch(err => {
     console.log(err);
