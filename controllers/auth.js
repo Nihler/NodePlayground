@@ -66,7 +66,19 @@ exports.getRegister = (req, res, next) => {
 exports.postRegister = (req, res, next) => {
   let temp = 0;
   if (req.session.user) temp = req.session.user.level;
-  if (req.body.password === req.body.passwordRepeat) {
+  if (
+    req.body.password === req.body.passwordRepeat &&
+    req.body.name !== "" &&
+    req.body.name &&
+    req.body.name !== "" &&
+    req.body.name &&
+    req.body.name !== "" &&
+    req.body.name &&
+    req.body.name !== "" &&
+    req.body.name &&
+    req.body.name !== "" &&
+    req.body.name
+  ) {
     User.build({
       login: req.body.login,
       password: req.body.password,
@@ -82,8 +94,15 @@ exports.postRegister = (req, res, next) => {
         console.log(err);
       });
   } else {
+    let info = "";
+    if (req.body.name == "") info += "Nie podano imienia \n";
+    if (req.body.surname == "") info += "Nie podano nazwiska \n";
+    if (req.body.login == "") info += "Nie podano loginu \n";
+    if (req.body.password == "") info += "Nie podano hasła \n";
+    if (req.body.password !== req.body.passwordRepeat) info += "Hasła nie zgadzają się \n";
+
     res.render("auth/register", {
-      info: "Passwords do not match!",
+      info: info,
       path: "/register",
       docTitle: "Register",
       isEdit: false,
@@ -108,7 +127,7 @@ exports.getEditUser = (req, res, next) => {
         path: "/register",
         docTitle: "Register",
         level: temp,
-        info:""
+        info: ""
       });
     })
     .catch(err => {
