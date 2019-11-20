@@ -57,6 +57,7 @@ exports.getRegister = (req, res, next) => {
   res.render("auth/register", {
     path: "/register",
     docTitle: "Register",
+    isEdit: false,
     level: temp
   });
 };
@@ -80,4 +81,53 @@ exports.postRegister = (req, res, next) => {
   } else {
     res.redirect("/register");
   }
+};
+
+exports.getEditUser = (req, res, next) => {
+  let temp = 0;
+  if (req.session.user) temp = req.session.user.level;
+
+  const user = User.findOne({
+    where: {
+      id: req.session.user.id
+    }
+  })
+    .then(result => {
+      res.render("auth/register", {
+        user: result,
+        isEdit: true,
+        path: "/register",
+        docTitle: "Register",
+        level: temp
+      });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+exports.postEditUser = (req, res, next) => {
+  const userId = req.body.userId;
+  console.log(userId);
+  const worker = User.findOne({
+    where: {
+      id: userId
+    }
+  })
+    .then(user => {
+      console.log("user " + user);
+      console.log(req.body);
+      user.name = req.body.imie;
+      user.surname = req.body.nazwisko;
+      user.password = req.body.password;
+      user.login = req.body.login;
+      return user.save();
+    })
+    .then(result => {
+      console.log("UPDATED USER");
+      res.redirect("/");
+    })
+    .catch(err => {
+      console.log(err);
+    });
 };

@@ -24,7 +24,6 @@ router.get("/edit-worker/:workerId", adminController.getEditWorker);
 
 router.get("/delete-worker/:workerId", adminController.getDeleteWorker);
 
-//router.get("/change-data", adminController.getChangeData);
 
 router.get("/change-level", adminController.getChangeLevel);
 
@@ -43,6 +42,5 @@ router.post("/add-worker", adminController.addWorker);
 
 router.post("/search", adminController.searchWorker);
 
-//router.post("/change-data", adminController.postChangeData);
 
 module.exports = router;
