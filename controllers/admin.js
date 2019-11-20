@@ -45,20 +45,17 @@ exports.getUsers = (req, res, next) => {
   let temp = 0;
   if (req.session.user) temp = req.session.user.level;
   const page = req.param.page || 1;
-  Users.findAll(
-    paginate({
-      where: {
-        level: {
-          [Op.lt]: [4]
-        }
-      },
-      page
-    })
-  ).then(users => {
+  Users.findAll({
+    where: {
+      level: {
+        [Op.lt]: [4]
+      }
+    }
+  }).then(users => {
     res.render("admin/delete-user", {
       usersList: users,
-      level: temp,
-      page: page + 1
+      level: temp
+      //page: page + 1
     });
   });
 };
@@ -162,14 +159,12 @@ exports.getWorkersDelete = (req, res, next) => {
   let temp = 0;
   if (req.session.user) temp = req.session.user.level;
 
-  const page = req.params.page || 0;
-  Worker.findAll(paginate({ where: {} }, page)).then(workers => {
+  Worker.findAll().then(workers => {
     res.render("admin/list", {
       workersList: workers,
       isEdit: false,
       isDelete: true,
-      level: temp,
-      page: page
+      level: temp
     });
   });
 };
