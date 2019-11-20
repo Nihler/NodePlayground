@@ -5,14 +5,20 @@
   height: 60px;
 }
 
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .main {
   background-color: yellow;
   float: left;
-  width: 72%;
+  flex: 1 1 auto;
   height: 400px;
   padding: 15px;
   margin: 15px;
-  white-space: nowrap;
+  /* max-width: calc(100vw - 300px); */
 }
 
 .main form {
@@ -24,13 +30,14 @@
 }
 
 .left-nav {
-  width: 10%;
-  float: left;
+  flex: 0 0 auto;
+  width: 150px;
 }
 
 .right-nav {
-  width: 10%;
-  float: right;
+  flex: 0 0 auto;
+  position: initial;
+  width: 150px;
   padding: 15px;
   margin: 15px;
   background-color: yellow;
