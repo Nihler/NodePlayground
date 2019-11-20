@@ -1,4 +1,6 @@
 const Sequelize = require("sequelize");
+
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 //DEV
 // const sequelize = new Sequelize("internety", "root", "admin", {
 //   dialect: "mysql",
