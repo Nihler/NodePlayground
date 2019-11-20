@@ -10,7 +10,10 @@ exports.getIndex = (req, res, next) => {
   console.log("=========================================");
   console.log(temp);
   console.log("=========================================");
+  let note = "Strona Główna";
+  if (req.session.user) note = "Witaj " + req.session.user.login;
   res.render("admin/index", {
+    info: note,
     level: temp
   });
 };
@@ -20,6 +23,7 @@ exports.getForm = (req, res, next) => {
   if (req.session.user) temp = req.session.user.level;
 
   res.render("admin/form", {
+    info: "",
     isEdit: false,
     level: temp
   });
@@ -57,8 +61,6 @@ exports.getDeleteUser = (req, res, next) => {
       console.log(err);
     });
 };
-
-
 
 exports.getChangeLevel = (req, res, next) => {
   let temp = 0;
@@ -102,8 +104,8 @@ exports.postChangeLevel = (req, res, next) => {
 };
 
 exports.getSessionData = (req, res, next) => {
-    let temp = 0;
-    if (req.session.user) temp = req.session.user.level;
+  let temp = 0;
+  if (req.session.user) temp = req.session.user.level;
 
   res.render("admin/session", { level: temp });
 };

@@ -55,6 +55,7 @@ exports.getRegister = (req, res, next) => {
   let temp = 0;
   if (req.session.user) temp = req.session.user.level;
   res.render("auth/register", {
+    info: "",
     path: "/register",
     docTitle: "Register",
     isEdit: false,
@@ -63,6 +64,8 @@ exports.getRegister = (req, res, next) => {
 };
 
 exports.postRegister = (req, res, next) => {
+  let temp = 0;
+  if (req.session.user) temp = req.session.user.level;
   if (req.body.password === req.body.passwordRepeat) {
     User.build({
       login: req.body.login,
@@ -79,7 +82,13 @@ exports.postRegister = (req, res, next) => {
         console.log(err);
       });
   } else {
-    res.redirect("/register");
+    res.render("auth/register", {
+      info: "Passwords do not match!",
+      path: "/register",
+      docTitle: "Register",
+      isEdit: false,
+      level: temp
+    });
   }
 };
 

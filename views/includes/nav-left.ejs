@@ -5,10 +5,10 @@
 
   <div class="left-nav">
     <ul class="list-left-nav">
-      <% if(level && level > 0) {%>
       <li>
         <a href="/">Strona Główna</a>
       </li>
+      <% if(level && level > 0) {%>
       <li>
         <a href="/form">Formularz</a>
       </li>
@@ -27,10 +27,9 @@
       <li>
         <a href="/get-workers-delete">Usuń pracownika</a>
       </li>
-      <% } %>
+      <% } %> <% if(level && level > 0) { %>
       <br />
       <br />
-      <% if(level && level > 0) { %>
       <li>
         <a href="/change-data">Zmień dane</a>
       </li>
