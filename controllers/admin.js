@@ -134,7 +134,7 @@ exports.getWorkers = (req, res, next) => {
       isEdit: false,
       isDelete: false,
       level: temp,
-      page: page
+      page: parseInt(page)
     });
   });
 };
@@ -150,7 +150,7 @@ exports.getWorkersEdit = (req, res, next) => {
       isEdit: true,
       isDelete: false,
       level: temp,
-      page: page
+      page: parseInt(page)
     });
   });
 };
