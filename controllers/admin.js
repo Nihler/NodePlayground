@@ -1,56 +1,149 @@
 const Worker = require("../models/worker");
+const Users = require("../models/user");
+const sequelize = require("../helpers/database");
+const Op = sequelize.Op;
 
 exports.getIndex = (req, res, next) => {
-  let temp = false;
+  let temp = 0;
   if (req.session.user) temp = req.session.user.level;
+
   console.log("=========================================");
   console.log(temp);
   console.log("=========================================");
   res.render("admin/index", {
-    isLoggedIn: temp
+    level: temp
   });
 };
 
 exports.getForm = (req, res, next) => {
+  let temp = 0;
+  if (req.session.user) temp = req.session.user.level;
+
   res.render("admin/form", {
     isEdit: false,
-    isLoggedIn: req.session.user.level > 0
+    level: temp
   });
 };
 
+exports.getUsers = (req, res, next) => {
+  let temp = 0;
+  if (req.session.user) temp = req.session.user.level;
+
+  Users.findAll({
+    where: {
+      level: {
+        [Op.lt]: [4]
+      }
+    }
+  }).then(users => {
+    res.render("admin/delete-user", {
+      usersList: users,
+      level: temp
+    });
+  });
+};
+
+exports.getDeleteUser = (req, res, next) => {
+  const userId = req.params.userId;
+  Users.destroy({
+    where: {
+      id: userId
+    }
+  })
+    .then(result => {
+      res.redirect("/delete-user");
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+exports.getChangeLevel = (req, res, next) => {
+  let temp = 0;
+  if (req.session.user) temp = req.session.user.level;
+
+  Users.findAll({
+    where: {
+      level: {
+        [Op.lt]: [4]
+      }
+    }
+  }).then(users => {
+    res.render("admin/change-level", {
+      usersList: users,
+      level: temp
+    });
+  });
+};
+
+exports.postChangeLevel = (req, res, next) => {
+  const userId = req.params.userId;
+  const newLevel = req.params.newLevel;
+  Users.findByPk(userId)
+    .then(result => {
+      if (result) {
+        result
+          .update({
+            level: newLevel
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+    })
+    .then(result => {
+      res.redirect("/change-level");
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
 exports.getSessionData = (req, res, next) => {
-  res.render("admin/form", { isLoggedIn: req.session.user.level > 0 });
+    let temp = 0;
+    if (req.session.user) temp = req.session.user.level;
+
+  res.render("admin/session", { level: temp });
 };
 
 exports.getWorkers = (req, res, next) => {
+  let temp = 0;
+  if (req.session.user) temp = req.session.user.level;
+
   Worker.findAll().then(workers => {
     res.render("admin/list", {
       workersList: workers,
       isEdit: false,
       isDelete: false,
-      isLoggedIn: req.session.user.level > 0
+      level: temp
     });
   });
 };
 
 exports.getWorkersEdit = (req, res, next) => {
+  let temp = 0;
+  if (req.session.user) temp = req.session.user.level;
+
   Worker.findAll().then(workers => {
     res.render("admin/list", {
       workersList: workers,
       isEdit: true,
       isDelete: false,
-      isLoggedIn: req.session.user.level > 0
+      level: temp
     });
   });
 };
 
 exports.getWorkersDelete = (req, res, next) => {
+  let temp = 0;
+  if (req.session.user) temp = req.session.user.level;
+
   Worker.findAll().then(workers => {
     res.render("admin/list", {
       workersList: workers,
       isEdit: false,
       isDelete: true,
-      isLoggedIn: req.session.user.level > 0
+      level: temp
     });
   });
 };
@@ -76,6 +169,9 @@ exports.addWorker = (req, res, next) => {
 };
 
 exports.searchWorker = (req, res, next) => {
+  let temp = 0;
+  if (req.session.user) temp = req.session.user.level;
+
   console.log(req.body);
   Worker.findAll({
     where: {
@@ -86,12 +182,15 @@ exports.searchWorker = (req, res, next) => {
       workersList: result,
       isEdit: false,
       isDelete: false,
-      isLoggedIn: req.session.user.level > 0
+      level: temp
     });
   });
 };
 
 exports.getEditWorker = (req, res, next) => {
+  let temp = 0;
+  if (req.session.user) temp = req.session.user.level;
+
   const worker = Worker.findOne({
     where: {
       id: req.params.workerId
@@ -101,7 +200,7 @@ exports.getEditWorker = (req, res, next) => {
       res.render("admin/form", {
         worker: result,
         isEdit: true,
-        isLoggedIn: req.session.user.level > 0
+        level: temp
       });
     })
     .catch(err => {
@@ -151,12 +250,15 @@ exports.getDeleteWorker = (req, res, next) => {
 exports.postDeleteWorker = (req, res, next) => {};
 
 exports.getAddProduct = (req, res, next) => {
+  let temp = 0;
+  if (req.session.user) temp = req.session.user.level;
+
   res.render("admin/edit-product", {
     docTitle: "Add Product",
     path: "admin/edit-product",
     activeAddProduct: true,
     editing: false,
-    isAuthenticated: req.isLoggedIn
+    level: temp
   });
 };
 
@@ -174,6 +276,9 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getEditProduct = (req, res, next) => {
+  let temp = 0;
+  if (req.session.user) temp = req.session.user.level;
+
   const editMode = req.query.edit;
   const prodId = req.params.productId;
   Product.findByPk(prodId).then(product => {
@@ -183,7 +288,7 @@ exports.getEditProduct = (req, res, next) => {
       activeAddProduct: true,
       editing: editMode,
       product: product,
-      isAuthenticated: req.isLoggedIn
+      level: temp
     });
   });
 };
@@ -217,6 +322,9 @@ exports.postDeleteProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
+  let temp = 0;
+  if (req.session.user) temp = req.session.user.level;
+
   req.session.user
     .getProducts()
     .then(products => {
@@ -226,7 +334,7 @@ exports.getProducts = (req, res, next) => {
         path: "/admin/products",
         hasProducts: products.length > 0,
         actvieShop: true,
-        isAuthenticated: req.isLoggedIn
+        level: temp
       });
     })
     .catch(err => {

@@ -5,6 +5,7 @@
 
   <div class="left-nav">
     <ul class="list-left-nav">
+      <% if(level && level > 0) {%>
       <li>
         <a href="/">Strona Główna</a>
       </li>
@@ -14,15 +15,34 @@
       <li>
         <a href="/session">Zawartość sesji</a>
       </li>
+
       <li>
         <a href="/get-workers">Baza pracowników</a>
       </li>
+      <% } %> <% if(level && level > 1) {%>
       <li>
         <a href="/get-workers-edit">Edytuj bazę pracowników</a>
       </li>
+      <% } %> <% if(level && level > 2) {%>
       <li>
         <a href="/get-workers-delete">Usuń pracownika</a>
       </li>
+      <% } %>
+      <br />
+      <br />
+      <% if(level && level > 0) { %>
+      <li>
+        <a href="/change-data">Zmień dane</a>
+      </li>
+      <% } %> <% if(level && level > 3) {%>
+      <li>
+        <a href="/change-level">Zmień poziom dostępu</a>
+      </li>
+      <% } %> <% if(level && level > 3) {%>
+      <li>
+        <a href="/delete-user">Usuń użytkownika</a>
+      </li>
+      <% } %>
     </ul>
   </div>
   <div class="main">

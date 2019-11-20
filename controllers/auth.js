@@ -1,6 +1,9 @@
 const User = require("../models/user");
 
 exports.getLogin = (req, res, next) => {
+  let temp = 0;
+  if (req.session.user) temp = req.session.user.level;
+
   // console.log("====================LOGIN=====================");
   // console.log(req.session);
   // console.log(req.session.user);
@@ -9,7 +12,7 @@ exports.getLogin = (req, res, next) => {
   res.render("auth/login", {
     path: "/login",
     docTitle: "Login",
-    isLoggedIn: false
+    level: temp
   });
 };
 
@@ -46,4 +49,35 @@ exports.getLogout = (req, res, next) => {
     console.log(err);
     res.redirect("/");
   });
+};
+
+exports.getRegister = (req, res, next) => {
+  let temp = 0;
+  if (req.session.user) temp = req.session.user.level;
+  res.render("auth/register", {
+    path: "/register",
+    docTitle: "Register",
+    level: temp
+  });
+};
+
+exports.postRegister = (req, res, next) => {
+  if (req.body.password === req.body.passwordRepeat) {
+    User.build({
+      login: req.body.login,
+      password: req.body.password,
+      name: req.body.name,
+      surname: req.body.surname,
+      level: 0
+    })
+      .save()
+      .then(result => {
+        res.redirect("/");
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  } else {
+    res.redirect("/register");
+  }
 };

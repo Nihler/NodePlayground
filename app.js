@@ -12,6 +12,7 @@ const authRoutes = require("./routes/auth");
 
 const errorController = require("./controllers/error");
 
+
 const Worker = require("./models/worker");
 
 const app = express();
