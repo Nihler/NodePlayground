@@ -160,7 +160,7 @@ exports.getWorkersDelete = (req, res, next) => {
   if (req.session.user) temp = req.session.user.level;
 
   const page = req.params.page || 0;
-  Worker.findAll().then(workers => {
+  Worker.findAll(paginate({ where: {} }, page)).then(workers => {
     res.render("admin/list", {
       workersList: workers,
       isEdit: false,
