@@ -69,7 +69,7 @@ exports.postRegister = (req, res, next) => {
       password: req.body.password,
       name: req.body.name,
       surname: req.body.surname,
-      level: 4
+      level: 0
     })
       .save()
       .then(result => {
