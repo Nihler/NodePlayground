@@ -6,7 +6,7 @@ const Op = sequelize.Op;
 const paginate = (query, page) => {
   const pageSize = 10;
   const offset = page * pageSize;
-  const limit = offset + pageSize;
+  const limit = 10;
 
   return {
     ...query,
@@ -37,7 +37,8 @@ exports.getForm = (req, res, next) => {
   res.render("admin/form", {
     info: "",
     isEdit: false,
-    level: temp
+    level: temp,
+    info: ""
   });
 };
 
@@ -120,7 +121,14 @@ exports.getSessionData = (req, res, next) => {
   let temp = 0;
   if (req.session.user) temp = req.session.user.level;
 
-  res.render("admin/session", { level: temp });
+  let newArray =[];
+  if(req.cookies.sesja != undefined){ 
+    const value = req.cookies.sesja;
+    newArray = value.array;
+  }
+  console.log(newArray);
+
+  res.render("admin/session", { level: temp, newArray: newArray });
 };
 
 exports.getWorkers = (req, res, next) => {
@@ -129,12 +137,19 @@ exports.getWorkers = (req, res, next) => {
   const page = req.params.page || 0;
 
   Worker.findAll(paginate({ where: {} }, page)).then(workers => {
+   Worker.count().then(counter =>{
+    console.log("==================");
+    console.log(counter);
+    
+
     res.render("admin/list", {
       workersList: workers,
       isEdit: false,
       isDelete: false,
       level: temp,
-      page: parseInt(page)
+      page: parseInt(page),
+      count: counter
+      });
     });
   });
 };
@@ -150,7 +165,8 @@ exports.getWorkersEdit = (req, res, next) => {
       isEdit: true,
       isDelete: false,
       level: temp,
-      page: parseInt(page)
+      page: parseInt(page),
+      count: workers.length
     });
   });
 };
@@ -166,29 +182,88 @@ exports.getWorkersDelete = (req, res, next) => {
       isEdit: false,
       isDelete: true,
       level: temp,
-      page: parseInt(page)
+      page: parseInt(page),
+      count: workers.length
     });
   });
 };
 
 exports.addWorker = (req, res, next) => {
-  console.log(req.body.imie);
+  let temp = 0;
+  if (req.session.user) temp = req.session.user.level;
 
-  Worker.build({
-    name: req.body.imie,
-    surname: req.body.nazwisko,
-    sex: req.body.plec,
-    surname2: req.body.panienskie,
-    email: req.body.email,
-    postal: req.body.kod
-  })
-    .save()
-    .then(result => {
-      res.redirect("/get-workers/0");
+  const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  const codeRegexp = /^([0-9]{2})(-[0-9]{3})?$/i;
+  console.log(codeRegexp.test(req.body.kod));
+  if (
+    req.body.imie !== "" &&
+    req.body.imie &&
+    req.body.nazwisko !== "" &&
+    req.body.nazwisko &&
+    req.body.plec !== "" &&
+    req.body.plec &&
+    req.body.panienskie !== "" &&
+    req.body.panienskie &&
+    req.body.email !== "" &&
+    req.body.email &&
+    req.body.kod !== "" &&
+    req.body.kod &&
+    emailRegexp.test(req.body.email) &&
+    codeRegexp.test(req.body.kod)
+  ) {
+    Worker.build({
+      name: req.body.imie,
+      surname: req.body.nazwisko,
+      sex: req.body.plec,
+      surname2: req.body.panienskie,
+      email: req.body.email,
+      postal: req.body.kod
     })
-    .catch(err => {
-      console.log(err);
+      .save()
+      .then(result => {
+        console.log("==================");
+        console.log(req.cookies.sesja);
+
+        if(req.cookies.sesja === undefined){
+          let objArray =[result.dataValues];
+          res.cookie('sesja',{counter: 1, array: objArray});
+        } 
+        else {
+          const value = req.cookies.sesja;
+          const newCounter = parseInt(value.counter)+1;
+          const newArray =  value.array;
+          newArray.push(result.dataValues);
+          res.cookie('sesja',{counter: newCounter, array: newArray}, {overwrite: true});
+        }
+
+                console.log("==================");
+        console.log(req.cookies.sesja);
+
+        res.redirect("/get-workers/0");
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  } else {
+    let info = "";
+    if (req.body.imie == "") info += "Nie podano imienia \n";
+    if (req.body.nazwisko == "") info += "Nie podano nazwiska \n";
+    if (req.body.plec || req.body.plec == "") info += "Nie podano płci \n";
+    if (req.body.email == "") info += "Nie podano maila \n";
+    if (req.body.panienskie == "") info += "Nie podano nazwiska panieńskiego \n";
+    if (req.body.kod == "") info += "Nie podano kodu \n";
+    if(!emailRegexp.test(req.body.email)) info +="Zły format maila, przykład: admin@admin.pl";
+    if(!codeRegexp.test(req.body.kod)) info +="Zły format kodu, przykład: 12-123";
+
+
+    res.render("admin/form", {
+      info: info,
+      path: "/register",
+      docTitle: "Register",
+      isEdit: false,
+      level: temp
     });
+  }
 };
 
 exports.searchWorker = (req, res, next) => {
@@ -197,9 +272,11 @@ exports.searchWorker = (req, res, next) => {
 
   const page = req.params.page || 0;
   console.log(req.body);
+  let workersArray = req.body.engine.split(" ");
+  console.log(workersArray);
   Worker.findAll({
     where: {
-      surname: { $like: "%" + req.body.engine + "%" }
+      surname: { $in: workersArray }
     }
   }).then(result => {
     res.render("admin/list", {
@@ -207,7 +284,8 @@ exports.searchWorker = (req, res, next) => {
       isEdit: false,
       isDelete: false,
       level: temp,
-      page: 0
+      page: 0,
+      count: result.length
     });
   });
 };
@@ -225,7 +303,8 @@ exports.getEditWorker = (req, res, next) => {
       res.render("admin/form", {
         worker: result,
         isEdit: true,
-        level: temp
+        level: temp,
+        info: ""
       });
     })
     .catch(err => {
@@ -234,6 +313,9 @@ exports.getEditWorker = (req, res, next) => {
 };
 
 exports.postEditWorker = (req, res, next) => {
+  let temp = 0;
+  if (req.session.user) temp = req.session.user.level;
+
   const workerId = req.body.workerId;
   console.log(workerId);
   const worker = Worker.findOne({
@@ -242,19 +324,58 @@ exports.postEditWorker = (req, res, next) => {
     }
   })
     .then(worker => {
-      console.log("worker " + worker);
-      console.log(req.body);
-      worker.name = req.body.imie;
-      worker.surname = req.body.nazwisko;
-      worker.surname2 = req.body.panienskie;
-      worker.sex = req.body.plec;
-      worker.email = req.body.email;
-      worker.postal = req.body.kod;
-      return worker.save();
+      // console.log("worker " + worker);
+      // console.log(req.body);
+
+        const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  const codeRegexp = /^([0-9]{2})(-[0-9]{3})?$/i;
+
+        if(req.body.imie !== "" &&
+          req.body.imie &&
+          req.body.nazwisko !== "" &&
+          req.body.nazwisko &&
+          req.body.panienskie !== "" &&
+          req.body.panienskie &&
+          req.body.email !== "" &&
+          req.body.email &&
+          req.body.kod !== "" &&
+          req.body.kod &&
+          emailRegexp.test(req.body.email)&&
+    codeRegexp.test(req.body.kod)
+        )  {
+        console.log("IF TRUE");
+        worker.name = req.body.imie;
+        worker.surname = req.body.nazwisko;
+        worker.surname2 = req.body.panienskie;
+        worker.sex = req.body.plec;
+        worker.email = req.body.email;
+        worker.postal = req.body.kod;
+        worker.save();
+      } else {
+        console.log("IF FALSE");
+        let info = "";
+        if (req.body.imie == "") info += "Nie podano imienia \n";
+        if (req.body.nazwisko == "") info += "Nie podano nazwiska \n";
+        if (req.body.email == "") info += "Nie podano maila \n";
+        if (req.body.panienskie == "") info += "Nie podano nazwiska panieńskiego \n";
+        if (req.body.kod == "") info += "Nie podano kodu \n";
+        if(!emailRegexp.test(req.body.email)) info +="Zły format maila, przykład: admin@admin.pl";
+    if(!codeRegexp.test(req.body.kod)) info +="Zły format kodu, przykład: 12-123";
+
+
+        res.render("admin/form", {
+          info: info,
+          path: "/register",
+          docTitle: "Register",
+          isEdit: true,
+          level: temp,
+          worker: worker
+        });
+      }
     })
     .then(result => {
       console.log("UPDATED PRODUCT");
-      res.redirect("/get-workers-edit");
+      res.redirect("/get-workers-edit/0");
     })
     .catch(err => {
       console.log(err);

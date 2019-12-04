@@ -38,6 +38,7 @@
           <% })%>
 
   </table>
+  <% if(page>0) { %>
   <% if(isEdit) { %>
     <a href="/get-workers-edit/<%= page-1 %>"><-</a>
   <% }else if (isDelete) { %>
@@ -46,14 +47,17 @@
       <a href="/get-workers/<%= page-1 %>"><-</a>
       
   <% } %>
+  <% } %>
   <%=page+1%>
+  <% if(count > (page+1)*10) { %>
     <% if(isEdit) { %>
-    <a href="/get-workers-edit/<%= page+1 %>">-></a> 
+      <a href="/get-workers-edit/<%= page+1 %>">-></a> 
     <% }else if (isDelete) { %>
        <a href="/get-workers-delete/<%= page+1 %>">-></a> 
-       <% } else { %> 
-        <a href="/get-workers/<%= page+1 %>">-></a> 
-        <% } %>
+    <% } else { %> 
+       <a href="/get-workers/<%= page+1 %>">-></a> 
+    <% } %>
+  <% } %>
   <% } else { %>
     <h2>NIE MA REKORDÓW SPEŁNIAJĄCYCH WARUNEK</h2>
   <% } %>

@@ -70,14 +70,14 @@ exports.postRegister = (req, res, next) => {
     req.body.password === req.body.passwordRepeat &&
     req.body.name !== "" &&
     req.body.name &&
-    req.body.name !== "" &&
-    req.body.name &&
-    req.body.name !== "" &&
-    req.body.name &&
-    req.body.name !== "" &&
-    req.body.name &&
-    req.body.name !== "" &&
-    req.body.name
+    req.body.surname !== "" &&
+    req.body.surname &&
+    req.body.login !== "" &&
+    req.body.login &&
+    req.body.password !== "" &&
+    req.body.password &&
+    req.body.passwordRepeat !== "" &&
+    req.body.passwordRepeat
   ) {
     User.build({
       login: req.body.login,

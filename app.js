@@ -42,6 +42,18 @@ app.use(authRoutes);
 app.use(adminRoutes);
 app.use(errorController.get404);
 
+app.use(function(req, res, next) {
+    if(req.cookies.sesja != undefined){
+      const value = req.cookies.sesja
+          res.cookieCounter = value.counter;
+          res.cookieArray = value.array;
+    } else {
+      res.cookieCounter = 0;
+          res.cookieArray = [];
+    }
+    next();
+});
+
 //Relacje w bazie danych
 
 // Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
