@@ -78,7 +78,8 @@ exports.postRegister = (req, res, next) => {
     req.body.password !== "" &&
     req.body.password &&
     req.body.passwordRepeat !== "" &&
-    req.body.passwordRepeat
+    req.body.passwordRepeat &&
+    req.body.login.toString().length >= 6
   ) {
     User.build({
       login: req.body.login,
@@ -101,11 +102,15 @@ exports.postRegister = (req, res, next) => {
     if (req.body.login == "") info += "Nie podano loginu \n";
     if (req.body.password == "") info += "Nie podano hasła \n";
     if (req.body.password !== req.body.passwordRepeat) info += "Hasła nie zgadzają się \n";
+    if (req.body.login.toString().length < 6) info += "Login ma mniej niż 6 znaków \n";
 
     let userObj = {};
     userObj.name = req.body.name;
     userObj.surname = req.body.surname;
-    userObj.login = req.body.login;
+    if (req.body.login.toString().length >= 6) userObj.login = req.body.login;
+    else userObj.login = "";
+
+    console.log(userObj);
 
     res.render("auth/register", {
       info: info,
