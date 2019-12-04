@@ -205,7 +205,7 @@ exports.addWorker = (req, res, next) => {
     req.body.imie &&
     req.body.nazwisko !== "" &&
     req.body.nazwisko &&
-    req.body.plec !== "" &&
+    req.body.plec !== undefined &&
     req.body.plec &&
     req.body.panienskie !== "" &&
     req.body.panienskie &&
@@ -254,7 +254,7 @@ exports.addWorker = (req, res, next) => {
     else info.push("");
     if (req.body.nazwisko == "") info.push("Nie podano nazwiska \n");
     else info.push("");
-    if (req.body.plec || req.body.plec == "") info.push("Nie podano płci \n");
+    if (req.body.plec == undefined || req.body.plec == "") info.push("Nie podano płci \n");
     else info.push("");
     if (req.body.panienskie == "") info.push("Nie podano nazwiska panieńskiego \n");
     else info.push("");
@@ -369,6 +369,7 @@ exports.postEditWorker = (req, res, next) => {
         req.body.email &&
         req.body.kod !== "" &&
         req.body.kod &&
+        req.body.kod !== undefined &&
         emailRegexp.test(req.body.email) &&
         codeRegexp.test(req.body.kod)
       ) {
@@ -387,7 +388,7 @@ exports.postEditWorker = (req, res, next) => {
         else info.push("");
         if (req.body.nazwisko == "") info.push("Nie podano nazwiska \n");
         else info.push("");
-        if (req.body.plec || req.body.plec == "") info.push("Nie podano płci \n");
+        if (req.body.plec == undefined || req.body.plec == "") info.push("Nie podano płci \n");
         else info.push("");
         if (req.body.panienskie == "") info.push("Nie podano nazwiska panieńskiego \n");
         else info.push("");
