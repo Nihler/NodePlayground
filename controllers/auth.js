@@ -140,7 +140,8 @@ exports.getEditUser = (req, res, next) => {
         path: "/register",
         docTitle: "Register",
         level: temp,
-        info: ""
+        info: "",
+        isRepeat: false
       });
     })
     .catch(err => {
