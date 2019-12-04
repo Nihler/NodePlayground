@@ -55,7 +55,7 @@ exports.getRegister = (req, res, next) => {
   let temp = 0;
   if (req.session.user) temp = req.session.user.level;
   res.render("auth/register", {
-    info: "",
+    info: [],
     path: "/register",
     docTitle: "Register",
     isEdit: false,
@@ -96,13 +96,18 @@ exports.postRegister = (req, res, next) => {
         console.log(err);
       });
   } else {
-    let info = "";
-    if (req.body.name == "") info += "Nie podano imienia \n";
-    if (req.body.surname == "") info += "Nie podano nazwiska \n";
-    if (req.body.login == "") info += "Nie podano loginu \n";
-    if (req.body.password == "") info += "Nie podano hasła \n";
-    if (req.body.password !== req.body.passwordRepeat) info += "Hasła nie zgadzają się \n";
-    if (req.body.login.toString().length < 6) info += "Login ma mniej niż 6 znaków \n";
+    let info = [];
+    if (req.body.name == "") info.push("Nie podano imienia");
+    else info.push("");
+    if (req.body.surname == "") info.push("Nie podano nazwiska \n");
+    else info.push("");
+    if (req.body.login == "") info.push("Nie podano loginu  \n");
+    else info.push("");
+    if (req.body.password == "") info.push("Nie podano hasła \n");
+    else info.push("");
+    if (req.body.passwordRepeat == "") info.push("Hasła nie zgadzają się \n");
+    else info.push("");
+    if (req.body.login < 6) info[2] += " Login ma mniej niż 6 znaków";
 
     let userObj = {};
     userObj.name = req.body.name;
@@ -140,7 +145,7 @@ exports.getEditUser = (req, res, next) => {
         path: "/register",
         docTitle: "Register",
         level: temp,
-        info: "",
+        info: [],
         isRepeat: false
       });
     })
