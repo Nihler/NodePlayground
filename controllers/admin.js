@@ -249,15 +249,21 @@ exports.addWorker = (req, res, next) => {
         console.log(err);
       });
   } else {
-    let info = "";
-    if (req.body.imie == "") info += "Nie podano imienia \n";
-    if (req.body.nazwisko == "") info += "Nie podano nazwiska \n";
-    if (req.body.plec || req.body.plec == "") info += "Nie podano płci \n";
-    if (req.body.email == "") info += "Nie podano maila \n";
-    if (req.body.panienskie == "") info += "Nie podano nazwiska panieńskiego \n";
-    if (req.body.kod == "") info += "Nie podano kodu \n";
-    if (!emailRegexp.test(req.body.email)) info += "Zły format maila, przykład: admin@admin.pl";
-    if (!codeRegexp.test(req.body.kod)) info += "Zły format kodu, przykład: 12-123";
+    let info = [];
+    if (req.body.imie == "") info.push("Nie podano imienia");
+    else info.push("");
+    if (req.body.nazwisko == "") info.push("Nie podano nazwiska \n");
+    else info.push("");
+    if (req.body.plec || req.body.plec == "") info.push("Nie podano płci \n");
+    else info.push("");
+    if (req.body.panienskie == "") info.push("Nie podano nazwiska panieńskiego \n");
+    else info.push("");
+    if (req.body.email == "") info.push("Nie podano maila \n");
+    else info.push("");
+    if (req.body.kod == "") info.push("Nie podano kodu \n");
+    else info.push("");
+    if (!emailRegexp.test(req.body.email)) info[4] += " Zły format maila, przykład: admin@admin.pl";
+    if (!codeRegexp.test(req.body.kod)) info[5] += " Zły format kodu, przykład: 12-123";
 
     console.log(req.body.plec);
 
@@ -375,14 +381,21 @@ exports.postEditWorker = (req, res, next) => {
         worker.save();
       } else {
         console.log("IF FALSE");
-        let info = "";
-        if (req.body.imie == "") info += "Nie podano imienia \n";
-        if (req.body.nazwisko == "") info += "Nie podano nazwiska \n";
-        if (req.body.email == "") info += "Nie podano maila \n";
-        if (req.body.panienskie == "") info += "Nie podano nazwiska panieńskiego \n";
-        if (req.body.kod == "") info += "Nie podano kodu \n";
-        if (!emailRegexp.test(req.body.email)) info += "Zły format maila, przykład: admin@admin.pl";
-        if (!codeRegexp.test(req.body.kod)) info += "Zły format kodu, przykład: 12-123";
+        let info = [];
+        if (req.body.imie == "") info.push("Nie podano imienia");
+        else info.push("");
+        if (req.body.nazwisko == "") info.push("Nie podano nazwiska \n");
+        else info.push("");
+        if (req.body.plec || req.body.plec == "") info.push("Nie podano płci \n");
+        else info.push("");
+        if (req.body.panienskie == "") info.push("Nie podano nazwiska panieńskiego \n");
+        else info.push("");
+        if (req.body.email == "") info.push("Nie podano maila \n");
+        else info.push("");
+        if (req.body.kod == "") info.push("Nie podano kodu \n");
+        else info.push("");
+        if (!emailRegexp.test(req.body.email)) info[43] += " Zły format maila, przykład: admin@admin.pl";
+        if (!codeRegexp.test(req.body.kod)) info[5] += " Zły format kodu, przykład: 12-123";
 
         res.render("admin/form", {
           info: info,
