@@ -121,8 +121,8 @@ exports.getSessionData = (req, res, next) => {
   let temp = 0;
   if (req.session.user) temp = req.session.user.level;
 
-  let newArray =[];
-  if(req.cookies.sesja != undefined){ 
+  let newArray = [];
+  if (req.cookies.sesja != undefined) {
     const value = req.cookies.sesja;
     newArray = value.array;
   }
@@ -137,18 +137,18 @@ exports.getWorkers = (req, res, next) => {
   const page = req.params.page || 0;
 
   Worker.findAll(paginate({ where: {} }, page)).then(workers => {
-   Worker.count().then(counter =>{
-    console.log("==================");
-    console.log(counter);
-    
+    Worker.count().then(counter => {
+      console.log("==================");
+      console.log(counter);
 
-    res.render("admin/list", {
-      workersList: workers,
-      isEdit: false,
-      isDelete: false,
-      level: temp,
-      page: parseInt(page),
-      count: counter
+
+      res.render("admin/list", {
+        workersList: workers,
+        isEdit: false,
+        isDelete: false,
+        level: temp,
+        page: parseInt(page),
+        count: counter
       });
     });
   });
@@ -158,15 +158,20 @@ exports.getWorkersEdit = (req, res, next) => {
   let temp = 0;
   if (req.session.user) temp = req.session.user.level;
 
+
+
   const page = req.params.page || 0;
   Worker.findAll(paginate({ where: {} }, page)).then(workers => {
-    res.render("admin/list", {
-      workersList: workers,
-      isEdit: true,
-      isDelete: false,
-      level: temp,
-      page: parseInt(page),
-      count: workers.length
+    Worker.count().then(counter => {
+
+      res.render("admin/list", {
+        workersList: workers,
+        isEdit: true,
+        isDelete: false,
+        level: temp,
+        page: parseInt(page),
+        count: counter
+      });
     });
   });
 };
@@ -177,13 +182,15 @@ exports.getWorkersDelete = (req, res, next) => {
 
   const page = req.params.page || 0;
   Worker.findAll(paginate({ where: {} }, page)).then(workers => {
-    res.render("admin/list", {
-      workersList: workers,
-      isEdit: false,
-      isDelete: true,
-      level: temp,
-      page: parseInt(page),
-      count: workers.length
+    Worker.count().then(counter => {
+      res.render("admin/list", {
+        workersList: workers,
+        isEdit: false,
+        isDelete: true,
+        level: temp,
+        page: parseInt(page),
+        count: counter
+      });
     });
   });
 };
@@ -224,19 +231,19 @@ exports.addWorker = (req, res, next) => {
         console.log("==================");
         console.log(req.cookies.sesja);
 
-        if(req.cookies.sesja === undefined){
-          let objArray =[result.dataValues];
-          res.cookie('sesja',{counter: 1, array: objArray});
-        } 
+        if (req.cookies.sesja === undefined) {
+          let objArray = [result.dataValues];
+          res.cookie('sesja', { counter: 1, array: objArray });
+        }
         else {
           const value = req.cookies.sesja;
-          const newCounter = parseInt(value.counter)+1;
-          const newArray =  value.array;
+          const newCounter = parseInt(value.counter) + 1;
+          const newArray = value.array;
           newArray.push(result.dataValues);
-          res.cookie('sesja',{counter: newCounter, array: newArray}, {overwrite: true});
+          res.cookie('sesja', { counter: newCounter, array: newArray }, { overwrite: true });
         }
 
-                console.log("==================");
+        console.log("==================");
         console.log(req.cookies.sesja);
 
         res.redirect("/get-workers/0");
@@ -252,8 +259,8 @@ exports.addWorker = (req, res, next) => {
     if (req.body.email == "") info += "Nie podano maila \n";
     if (req.body.panienskie == "") info += "Nie podano nazwiska panieńskiego \n";
     if (req.body.kod == "") info += "Nie podano kodu \n";
-    if(!emailRegexp.test(req.body.email)) info +="Zły format maila, przykład: admin@admin.pl";
-    if(!codeRegexp.test(req.body.kod)) info +="Zły format kodu, przykład: 12-123";
+    if (!emailRegexp.test(req.body.email)) info += "Zły format maila, przykład: admin@admin.pl";
+    if (!codeRegexp.test(req.body.kod)) info += "Zły format kodu, przykład: 12-123";
 
 
     res.render("admin/form", {
@@ -327,22 +334,22 @@ exports.postEditWorker = (req, res, next) => {
       // console.log("worker " + worker);
       // console.log(req.body);
 
-        const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-  const codeRegexp = /^([0-9]{2})(-[0-9]{3})?$/i;
+      const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+      const codeRegexp = /^([0-9]{2})(-[0-9]{3})?$/i;
 
-        if(req.body.imie !== "" &&
-          req.body.imie &&
-          req.body.nazwisko !== "" &&
-          req.body.nazwisko &&
-          req.body.panienskie !== "" &&
-          req.body.panienskie &&
-          req.body.email !== "" &&
-          req.body.email &&
-          req.body.kod !== "" &&
-          req.body.kod &&
-          emailRegexp.test(req.body.email)&&
-    codeRegexp.test(req.body.kod)
-        )  {
+      if (req.body.imie !== "" &&
+        req.body.imie &&
+        req.body.nazwisko !== "" &&
+        req.body.nazwisko &&
+        req.body.panienskie !== "" &&
+        req.body.panienskie &&
+        req.body.email !== "" &&
+        req.body.email &&
+        req.body.kod !== "" &&
+        req.body.kod &&
+        emailRegexp.test(req.body.email) &&
+        codeRegexp.test(req.body.kod)
+      ) {
         console.log("IF TRUE");
         worker.name = req.body.imie;
         worker.surname = req.body.nazwisko;
@@ -359,8 +366,8 @@ exports.postEditWorker = (req, res, next) => {
         if (req.body.email == "") info += "Nie podano maila \n";
         if (req.body.panienskie == "") info += "Nie podano nazwiska panieńskiego \n";
         if (req.body.kod == "") info += "Nie podano kodu \n";
-        if(!emailRegexp.test(req.body.email)) info +="Zły format maila, przykład: admin@admin.pl";
-    if(!codeRegexp.test(req.body.kod)) info +="Zły format kodu, przykład: 12-123";
+        if (!emailRegexp.test(req.body.email)) info += "Zły format maila, przykład: admin@admin.pl";
+        if (!codeRegexp.test(req.body.kod)) info += "Zły format kodu, przykład: 12-123";
 
 
         res.render("admin/form", {
@@ -393,7 +400,7 @@ exports.getDeleteWorker = (req, res, next) => {
     });
 };
 
-exports.postDeleteWorker = (req, res, next) => {};
+exports.postDeleteWorker = (req, res, next) => { };
 
 exports.getAddProduct = (req, res, next) => {
   let temp = 0;
