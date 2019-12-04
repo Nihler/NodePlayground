@@ -331,7 +331,8 @@ exports.getEditWorker = (req, res, next) => {
         worker: result,
         isEdit: true,
         level: temp,
-        info: ""
+        info: "",
+        isRepeat: false
       });
     })
     .catch(err => {
