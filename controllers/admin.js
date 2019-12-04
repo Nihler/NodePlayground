@@ -196,6 +196,7 @@ exports.addWorker = (req, res, next) => {
   let temp = 0;
   if (req.session.user) temp = req.session.user.level;
 
+  console.log(req.body);
   const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
   const codeRegexp = /^([0-9]{2})(-[0-9]{3})?$/i;
   console.log(codeRegexp.test(req.body.kod));
@@ -258,14 +259,16 @@ exports.addWorker = (req, res, next) => {
     if (!emailRegexp.test(req.body.email)) info += "Zły format maila, przykład: admin@admin.pl";
     if (!codeRegexp.test(req.body.kod)) info += "Zły format kodu, przykład: 12-123";
 
+    console.log(req.body.plec);
+
     let workerObj = {};
-    workerObj.name = req.body.imie;
+    workerObj.name = req.body.imie.toString();
     workerObj.surname = req.body.nazwisko;
     workerObj.sex = req.body.plec;
     if (emailRegexp.test(req.body.email)) workerObj.email = req.body.email;
     else workerObj.email = "";
     workerObj.surname2 = req.body.panienskie;
-    if (codeRegexp.test(req.body.kod)) workerObj.postal = req.body.postal;
+    if (codeRegexp.test(req.body.kod)) workerObj.postal = req.body.kod;
     else workerObj.postal = "";
     let arr = [workerObj];
 
