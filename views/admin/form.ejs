@@ -12,32 +12,32 @@
 
       <div class="form-control">
         <label for="imie">Imie</label>
-        <input type="text" name="imie" id="imie" value="<%if(isEdit && worker) { %> <%= worker.name %> <% } %>" >
+        <input type="text" name="imie" id="imie" value="<%if(isRepeat || isEdit && worker) { %> <%= worker.name %> <% } %>" >
       </div>
       <div class="form-control">
         <label for="nazwisko">Nazwisko</label>
-        <input type="text" name="nazwisko" id="nazwisko" value="<%if(isEdit && worker) { %> <%= worker.surname %> <% } %>" >
+        <input type="text" name="nazwisko" id="nazwisko" value="<%if(isRepeat || isEdit && worker) { %> <%= worker.surname %> <% } %>" >
       </div>
       <div class="form-control">
         <label for="plec">Płeć</label>
         <label>
-        <input type="radio" name="plec" id="plec" value="kobieta" <%if(isEdit && worker&& worker.sex == "kobieta") { %> checked <% } %> > kobieta
+        <input type="radio" name="plec" id="plec" value="kobieta" <%if(isRepeat || isEdit && worker&& worker.sex == "kobieta") { %> checked <% } %> > kobieta
         </label><br>
         <label>
-        <input type="radio" name="plec" id="plec" value="mezczyzna" <%if(isEdit && worker && worker.sex == "mezczyzna") { %> checked <% } %> > mężczyzna
+        <input type="radio" name="plec" id="plec" value="mezczyzna" <%if(isRepeat || isEdit && worker && worker.sex == "mezczyzna") { %> checked <% } %> > mężczyzna
         </label>
       </div>
       <div class="form-control">
         <label for="panienskie">Nazwisko panienskie</label>
-        <input type="text" name="panienskie" id="panienskie" value="<%if(isEdit && worker) { %> <%= worker.surname2 %> <% } %>" >
+        <input type="text" name="panienskie" id="panienskie" value="<%if(isRepeat || isEdit && worker) { %> <%= worker.surname2 %> <% } %>" >
       </div>
       <div class="form-control">
         <label for="email">Email</label>
-        <input type="text" name="email" id="email" value="<%if(isEdit && worker) { %> <%= worker.email %> <% } %>" >
+        <input type="text" name="email" id="email" value="<%if(isRepeat || isEdit && worker) { %> <%= worker.email %> <% } %>" >
       </div>
       <div class="form-control">
         <label for="kod">Kod pocztowy</label>
-        <input type="text" name="kod" id="kod" value="<%if(isEdit && worker) { %> <%= worker.postal %> <% } %>"  >
+        <input type="text" name="kod" id="kod" value="<%if(isRepeat || isEdit && worker) { %> <%= worker.postal %> <% } %>"  >
       </div>
 
             <% if (isEdit) { %>

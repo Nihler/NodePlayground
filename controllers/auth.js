@@ -59,7 +59,8 @@ exports.getRegister = (req, res, next) => {
     path: "/register",
     docTitle: "Register",
     isEdit: false,
-    level: temp
+    level: temp,
+    isRepeat: false
   });
 };
 
@@ -101,12 +102,19 @@ exports.postRegister = (req, res, next) => {
     if (req.body.password == "") info += "Nie podano hasła \n";
     if (req.body.password !== req.body.passwordRepeat) info += "Hasła nie zgadzają się \n";
 
+    let userObj = {};
+    userObj.name = req.body.name;
+    userObj.surname = req.body.surname;
+    userObj.login = req.body.login;
+
     res.render("auth/register", {
       info: info,
       path: "/register",
       docTitle: "Register",
       isEdit: false,
-      level: temp
+      level: temp,
+      isRepeat: true,
+      user: userObj
     });
   }
 };

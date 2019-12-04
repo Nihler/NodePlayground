@@ -38,7 +38,8 @@ exports.getForm = (req, res, next) => {
     info: "",
     isEdit: false,
     level: temp,
-    info: ""
+    info: "",
+    isRepeat: false
   });
 };
 
@@ -141,7 +142,6 @@ exports.getWorkers = (req, res, next) => {
       console.log("==================");
       console.log(counter);
 
-
       res.render("admin/list", {
         workersList: workers,
         isEdit: false,
@@ -158,12 +158,9 @@ exports.getWorkersEdit = (req, res, next) => {
   let temp = 0;
   if (req.session.user) temp = req.session.user.level;
 
-
-
   const page = req.params.page || 0;
   Worker.findAll(paginate({ where: {} }, page)).then(workers => {
     Worker.count().then(counter => {
-
       res.render("admin/list", {
         workersList: workers,
         isEdit: true,
@@ -233,14 +230,13 @@ exports.addWorker = (req, res, next) => {
 
         if (req.cookies.sesja === undefined) {
           let objArray = [result.dataValues];
-          res.cookie('sesja', { counter: 1, array: objArray });
-        }
-        else {
+          res.cookie("sesja", { counter: 1, array: objArray });
+        } else {
           const value = req.cookies.sesja;
           const newCounter = parseInt(value.counter) + 1;
           const newArray = value.array;
           newArray.push(result.dataValues);
-          res.cookie('sesja', { counter: newCounter, array: newArray }, { overwrite: true });
+          res.cookie("sesja", { counter: newCounter, array: newArray }, { overwrite: true });
         }
 
         console.log("==================");
@@ -262,13 +258,28 @@ exports.addWorker = (req, res, next) => {
     if (!emailRegexp.test(req.body.email)) info += "Zły format maila, przykład: admin@admin.pl";
     if (!codeRegexp.test(req.body.kod)) info += "Zły format kodu, przykład: 12-123";
 
+    let workerObj = {};
+    workerObj.name = req.body.imie;
+    workerObj.surname = req.body.nazwisko;
+    workerObj.sex = req.body.plec;
+    if (emailRegexp.test(req.body.email)) workerObj.email = req.body.email;
+    else workerObj.email = "";
+    workerObj.surname2 = req.body.panienskie;
+    if (codeRegexp.test(req.body.kod)) workerObj.postal = req.body.postal;
+    else workerObj.postal = "";
+    let arr = [workerObj];
+
+    console.log("=======================");
+    console.log(workerObj);
 
     res.render("admin/form", {
       info: info,
       path: "/register",
       docTitle: "Register",
       isEdit: false,
-      level: temp
+      level: temp,
+      isRepeat: true,
+      worker: workerObj
     });
   }
 };
@@ -337,7 +348,8 @@ exports.postEditWorker = (req, res, next) => {
       const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
       const codeRegexp = /^([0-9]{2})(-[0-9]{3})?$/i;
 
-      if (req.body.imie !== "" &&
+      if (
+        req.body.imie !== "" &&
         req.body.imie &&
         req.body.nazwisko !== "" &&
         req.body.nazwisko &&
@@ -369,7 +381,6 @@ exports.postEditWorker = (req, res, next) => {
         if (!emailRegexp.test(req.body.email)) info += "Zły format maila, przykład: admin@admin.pl";
         if (!codeRegexp.test(req.body.kod)) info += "Zły format kodu, przykład: 12-123";
 
-
         res.render("admin/form", {
           info: info,
           path: "/register",
@@ -400,7 +411,7 @@ exports.getDeleteWorker = (req, res, next) => {
     });
 };
 
-exports.postDeleteWorker = (req, res, next) => { };
+exports.postDeleteWorker = (req, res, next) => {};
 
 exports.getAddProduct = (req, res, next) => {
   let temp = 0;
