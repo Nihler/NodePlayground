@@ -300,10 +300,16 @@ exports.searchWorker = (req, res, next) => {
   const page = req.params.page || 0;
   console.log(req.body);
   let workersArray = req.body.engine.split(" ");
-  console.log(workersArray);
+  workersArray = workersArray.map(i => "%" + i + "%");
+  //console.log(workersArray);
   Worker.findAll({
     where: {
-      surname: { $in: workersArray }
+      surname: {
+        $or: {
+          $like: { $any: workersArray },
+          $in: workersArray
+        }
+      }
     }
   }).then(result => {
     res.render("admin/list", {
@@ -311,7 +317,7 @@ exports.searchWorker = (req, res, next) => {
       isEdit: false,
       isDelete: false,
       level: temp,
-      page: 0,
+      page: page,
       count: result.length
     });
   });
