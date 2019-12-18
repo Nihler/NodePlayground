@@ -38,7 +38,7 @@ router.get("/search/", adminController.searchWorker);
 router.get("/delete-user/:userId", adminController.getDeleteUser);
 
 //POST
-router.post("/edit-worker", adminController.postEditWorker);
+router.post("/edit-worker/:workerId", adminController.postEditWorker);
 
 router.post("/delete-worker/:workerId", adminController.postDeleteWorker);
 

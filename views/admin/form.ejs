@@ -4,7 +4,7 @@
 
   <%- include('../includes/nav-left.ejs') %>
 
-    <form class="product-form" action="/<% if (isEdit) { %>edit-worker<% } else { %>add-worker<% } %>"
+    <form class="product-form" action="/<% if (isEdit) { %>edit-worker/<%= worker.id %><% } else { %>add-worker<% } %>"
       method="POST">
 
       <div class="form-control">

@@ -425,6 +425,7 @@ exports.postEditWorker = (req, res, next) => {
         console.log(info);
 
         let workerObj = {};
+        workerObj.id = req.param.workerId || req.body.workerId;
         workerObj.name = req.body.imie.toString();
         workerObj.surname = req.body.nazwisko;
         workerObj.sex = req.body.plec;
@@ -433,6 +434,8 @@ exports.postEditWorker = (req, res, next) => {
         workerObj.surname2 = req.body.panienskie;
         if (codeRegexp.test(req.body.kod)) workerObj.postal = req.body.kod;
         else workerObj.postal = "";
+
+        console.log(workerObj);
 
         res.render("admin/form", {
           info: info,
