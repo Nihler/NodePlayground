@@ -401,7 +401,9 @@ exports.postEditWorker = (req, res, next) => {
         worker.sex = req.body.plec;
         worker.email = req.body.email;
         worker.postal = req.body.kod;
-        worker.save();
+        worker.save().then(() => {
+          res.redirect("/get-workers-edit/0");
+        });
       } else {
         console.log("IF FALSE");
         let info = [];
@@ -417,8 +419,10 @@ exports.postEditWorker = (req, res, next) => {
         else info.push("");
         if (req.body.kod == "") info.push("Nie podano kodu \n");
         else info.push("");
-        if (!emailRegexp.test(req.body.email)) info[43] += " Zły format maila, przykład: admin@admin.pl";
+        if (!emailRegexp.test(req.body.email)) info[4] += " Zły format maila, przykład: admin@admin.pl";
         if (!codeRegexp.test(req.body.kod)) info[5] += " Zły format kodu, przykład: 12-123";
+
+        console.log(info);
 
         res.render("admin/form", {
           info: info,
@@ -426,13 +430,10 @@ exports.postEditWorker = (req, res, next) => {
           docTitle: "Register",
           isEdit: true,
           level: temp,
-          worker: worker
+          worker: worker,
+          isRepeat: true
         });
       }
-    })
-    .then(result => {
-      console.log("UPDATED PRODUCT");
-      res.redirect("/get-workers-edit/0");
     })
     .catch(err => {
       console.log(err);
