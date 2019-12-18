@@ -192,15 +192,15 @@ exports.postEditUser = (req, res, next) => {
       .then(user => {
         console.log("user " + user);
         console.log(req.body);
-        user.name = req.body.imie;
-        user.surname = req.body.nazwisko;
+        user.name = req.body.name;
+        user.surname = req.body.surname;
         user.password = req.body.password;
         user.login = req.body.login;
         return user.save();
       })
       .then(result => {
         console.log("UPDATED USER");
-        res.redirect("/");
+        res.redirect("/logout");
       })
       .catch(err => {
         console.log(err);
