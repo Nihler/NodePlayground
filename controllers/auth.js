@@ -12,7 +12,8 @@ exports.getLogin = (req, res, next) => {
   res.render("auth/login", {
     path: "/login",
     docTitle: "Login",
-    level: temp
+    level: temp,
+    message: ""
   });
 };
 
@@ -40,7 +41,12 @@ exports.postLogin = (req, res, next) => {
       res.redirect("/");
     })
     .catch(err => {
-      console.log(err);
+      res.render("auth/login", {
+        path: "/login",
+        docTitle: "Login",
+        level: 0,
+        message: "Błąd logowania"
+      });
     });
 };
 
