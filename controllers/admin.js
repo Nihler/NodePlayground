@@ -424,6 +424,14 @@ exports.postEditWorker = (req, res, next) => {
 
         console.log(info);
 
+        //let worker;
+        worker.name = req.body.imie || "";
+        worker.surname = req.body.nazwisko || "";
+        worker.surname2 = req.body.panienskie || "";
+        worker.sex = req.body.plec || "";
+        worker.email = req.body.email || "";
+        worker.postal = req.body.kod || "";
+
         res.render("admin/form", {
           info: info,
           path: "/register",
