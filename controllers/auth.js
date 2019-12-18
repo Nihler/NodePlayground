@@ -113,13 +113,12 @@ exports.postRegister = (req, res, next) => {
     else info.push("");
     if (req.body.passwordRepeat == "") info.push("Hasła nie zgadzają się \n");
     else info.push("");
-    if (req.body.login < 6) info[2] += " Login ma mniej niż 6 znaków";
+    if (req.body.login.toString().length < 6) info[2] += " Login ma mniej niż 6 znaków";
 
     let userObj = {};
-    userObj.name = req.body.name;
-    userObj.surname = req.body.surname;
-    if (req.body.login.toString().length >= 6) userObj.login = req.body.login;
-    else userObj.login = "";
+    userObj.name = req.body.name || "";
+    userObj.surname = req.body.surname || "";
+    userObj.login = req.body.login || "";
 
     console.log(userObj);
 
@@ -163,25 +162,80 @@ exports.getEditUser = (req, res, next) => {
 exports.postEditUser = (req, res, next) => {
   const userId = req.body.userId;
   console.log(userId);
-  const worker = User.findOne({
-    where: {
-      id: userId
-    }
-  })
-    .then(user => {
-      console.log("user " + user);
-      console.log(req.body);
-      user.name = req.body.imie;
-      user.surname = req.body.nazwisko;
-      user.password = req.body.password;
-      user.login = req.body.login;
-      return user.save();
+
+  let temp = 0;
+  if (req.session.user) temp = req.session.user.level;
+  console.log("=======================");
+  console.log(req.body.login.toString().length >= 6);
+  console.log("=======================");
+  if (
+    req.body.password === req.body.passwordRepeat &&
+    req.body.name !== "" &&
+    req.body.name &&
+    req.body.surname !== "" &&
+    req.body.surname &&
+    req.body.login !== "" &&
+    req.body.login &&
+    req.body.password !== "" &&
+    req.body.password &&
+    req.body.passwordRepeat !== "" &&
+    req.body.passwordRepeat &&
+    req.body.login.toString().length >= 6
+  ) {
+    const worker = User.findOne({
+      where: {
+        id: userId
+      }
     })
-    .then(result => {
-      console.log("UPDATED USER");
-      res.redirect("/");
-    })
-    .catch(err => {
-      console.log(err);
+      .then(user => {
+        console.log("user " + user);
+        console.log(req.body);
+        user.name = req.body.imie;
+        user.surname = req.body.nazwisko;
+        user.password = req.body.password;
+        user.login = req.body.login;
+        return user.save();
+      })
+      .then(result => {
+        console.log("UPDATED USER");
+        res.redirect("/");
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  } else {
+    let info = [];
+    if (req.body.name == "") info.push("Nie podano imienia");
+    else info.push("");
+    if (req.body.surname == "") info.push("Nie podano nazwiska \n");
+    else info.push("");
+    if (req.body.login == "") info.push("Nie podano loginu  \n");
+    else info.push("");
+    if (req.body.password == "") info.push("Nie podano hasła \n");
+    else info.push("");
+    if (req.body.passwordRepeat == "") info.push("Hasła nie zgadzają się \n");
+    else info.push("");
+    if (req.body.login.toString().length <= 6) info[2] = info[2] + " Login ma mniej niż 6 znaków";
+    else console.log("FALSE");
+
+    //info[2] += " Login ma mniej niż 6 znaków";
+    console.log(info);
+
+    let userObj = {};
+    userObj.name = req.body.name || "";
+    userObj.surname = req.body.surname || "";
+    userObj.login = req.body.login || "";
+
+    console.log(userObj);
+
+    res.render("auth/register", {
+      info: info,
+      path: "/register",
+      docTitle: "Register",
+      isEdit: true,
+      level: temp,
+      isRepeat: true,
+      user: userObj
     });
+  }
 };
