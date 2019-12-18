@@ -66,7 +66,8 @@ exports.getRegister = (req, res, next) => {
     docTitle: "Register",
     isEdit: false,
     level: temp,
-    isRepeat: false
+    isRepeat: false,
+    user: {}
   });
 };
 
