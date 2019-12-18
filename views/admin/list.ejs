@@ -43,18 +43,22 @@
     <a href="/get-workers-edit/<%= page-1 %>"><-</a>
   <% }else if (isDelete) { %>
 <a href="/get-workers-delete/<%= page-1 %>"><-</a>
+    <% }else if (search) { %>
+    <a href="/search/<%= page-1 %>?engine=<%= engine%>"><-</a>
     <% } else { %>
       <a href="/get-workers/<%= page-1 %>"><-</a>
       
   <% } %>
   <% } %>
   <%=page+1%>
-  <% if(count > (page+1)*10) { %>
-    <% if(isEdit) { %>
+  <% if(count > (page+1)*10 || search) { %>
+    <% if (search && count == 10) { %>
+      <a href="/search/<%= page+1 %>?engine=<%= engine%>">-></a>
+    <% } else if(isEdit) { %>
       <a href="/get-workers-edit/<%= page+1 %>">-></a> 
     <% }else if (isDelete) { %>
        <a href="/get-workers-delete/<%= page+1 %>">-></a> 
-    <% } else { %> 
+    <% } else if (!search){ %> 
        <a href="/get-workers/<%= page+1 %>">-></a> 
     <% } %>
   <% } %>

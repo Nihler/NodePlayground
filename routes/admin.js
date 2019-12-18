@@ -41,6 +41,7 @@ router.post("/delete-worker", adminController.postDeleteWorker);
 
 router.post("/add-worker", adminController.addWorker);
 
-router.post("/search/", adminController.searchWorker);
+router.get("/search/:page", adminController.searchWorker);
+router.get("/search/", adminController.searchWorker);
 
 module.exports = router;

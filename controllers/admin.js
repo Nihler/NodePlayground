@@ -148,7 +148,8 @@ exports.getWorkers = (req, res, next) => {
         isDelete: false,
         level: temp,
         page: parseInt(page),
-        count: counter
+        count: counter,
+        search: false
       });
     });
   });
@@ -167,7 +168,8 @@ exports.getWorkersEdit = (req, res, next) => {
         isDelete: false,
         level: temp,
         page: parseInt(page),
-        count: counter
+        count: counter,
+        search: false
       });
     });
   });
@@ -186,7 +188,8 @@ exports.getWorkersDelete = (req, res, next) => {
         isDelete: true,
         level: temp,
         page: parseInt(page),
-        count: counter
+        count: counter,
+        search: false
       });
     });
   });
@@ -298,27 +301,39 @@ exports.searchWorker = (req, res, next) => {
   if (req.session.user) temp = req.session.user.level;
 
   const page = req.params.page || 0;
-  console.log(req.body);
-  let workersArray = req.body.engine.split(" ");
+  let workersArray = req.query.engine.split(" ");
+  let workerString = "";
+  workersArray.forEach(element => {
+    workerString += element + "+";
+  });
   workersArray = workersArray.map(i => "%" + i + "%");
+  workerString = workerString.substring(0, workerString.length - 1);
   //console.log(workersArray);
-  Worker.findAll({
-    where: {
-      surname: {
-        $or: {
-          $like: { $any: workersArray },
-          $in: workersArray
+  Worker.findAll(
+    paginate(
+      {
+        where: {
+          surname: {
+            $or: {
+              $like: { $any: workersArray },
+              $in: workersArray
+            }
+          }
         }
-      }
-    }
-  }).then(result => {
+      },
+      page
+    )
+  ).then(result => {
+    console.log(result.length);
     res.render("admin/list", {
       workersList: result,
       isEdit: false,
       isDelete: false,
       level: temp,
-      page: page,
-      count: result.length
+      page: parseInt(page),
+      count: result.length,
+      engine: workerString,
+      search: true
     });
   });
 };
