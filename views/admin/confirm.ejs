@@ -1,0 +1,19 @@
+<%- include('../includes/head.ejs') %>
+</head>
+
+
+<%- include('../includes/nav-left.ejs') %>
+
+<h2>Czy na pewno chcesz usunąć tego pracownika? </h2>
+
+
+<form class="product-form" action="/delete-worker/<%=workerId%>" method="POST">
+
+<button class="brn" type="submit">Usuń</button>
+
+<button class="brn"><a href="/">Anuluj</a> </button>
+
+</form>
+
+<%- include('../includes/nav-right.ejs') %>
+<%- include('../includes/end.ejs') %>

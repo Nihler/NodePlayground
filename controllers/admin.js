@@ -440,6 +440,18 @@ exports.postEditWorker = (req, res, next) => {
 };
 
 exports.getDeleteWorker = (req, res, next) => {
+  let temp = 0;
+  if (req.session.user) temp = req.session.user.level;
+  const workerId = req.params.workerId;
+  res.render("admin/confirm", {
+    workerId: workerId,
+    level: temp
+  });
+};
+
+exports.postDeleteWorker = (req, res, next) => {
+  let temp = 0;
+  if (req.session.user) temp = req.session.user.level;
   const workerId = req.params.workerId;
   Worker.destroy({ where: { id: workerId } })
     .then(result => {
@@ -449,8 +461,6 @@ exports.getDeleteWorker = (req, res, next) => {
       console.log(err);
     });
 };
-
-exports.postDeleteWorker = (req, res, next) => {};
 
 exports.getAddProduct = (req, res, next) => {
   let temp = 0;

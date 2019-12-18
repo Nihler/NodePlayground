@@ -30,6 +30,9 @@ router.get("/change-level/:userId&:newLevel", adminController.postChangeLevel);
 
 router.get("/delete-user", adminController.getUsers);
 
+router.get("/search/:page", adminController.searchWorker);
+router.get("/search/", adminController.searchWorker);
+
 //router.get("/delete-user", adminController.getUsers);
 
 router.get("/delete-user/:userId", adminController.getDeleteUser);
@@ -37,11 +40,8 @@ router.get("/delete-user/:userId", adminController.getDeleteUser);
 //POST
 router.post("/edit-worker", adminController.postEditWorker);
 
-router.post("/delete-worker", adminController.postDeleteWorker);
+router.post("/delete-worker/:workerId", adminController.postDeleteWorker);
 
 router.post("/add-worker", adminController.addWorker);
-
-router.get("/search/:page", adminController.searchWorker);
-router.get("/search/", adminController.searchWorker);
 
 module.exports = router;
