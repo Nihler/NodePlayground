@@ -145,6 +145,7 @@ exports.getEditUser = (req, res, next) => {
     }
   })
     .then(result => {
+      console.log(result);
       res.render("auth/register", {
         user: result,
         isEdit: true,
@@ -223,6 +224,7 @@ exports.postEditUser = (req, res, next) => {
     console.log(info);
 
     let userObj = {};
+    userObj.id = userId;
     userObj.name = req.body.name || "";
     userObj.surname = req.body.surname || "";
     if (req.body.login.toString().length < 6) userObj.login = "";

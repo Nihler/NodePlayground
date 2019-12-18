@@ -27,10 +27,11 @@
     <label for="surname">Nazwisko <%=info[1]%></label>
     <input type="text" name="surname" id="surname" value="<%if(isRepeat || isEdit && user) { %><%= user.surname %><% } %>">
   </div>
-<% if (isEdit && user) { %>
+<% if (user) { %>
 <input type="hidden" value="<%= user.id %>" name="userId" id="userId">
 <% } %>
   <button class="btn" type="submit">Wyślij</button>
+
 </form>
 
 
