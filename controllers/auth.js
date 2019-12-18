@@ -217,7 +217,7 @@ exports.postEditUser = (req, res, next) => {
     else info.push("");
     if (req.body.passwordRepeat == "") info.push("Hasła nie zgadzają się \n");
     else info.push("");
-    if (req.body.login.toString().length <= 6) info[2] = info[2] + " Login ma mniej niż 6 znaków";
+    if (req.body.login.toString().length < 6) info[2] = info[2] + " Login ma mniej niż 6 znaków";
     else console.log("FALSE");
 
     //info[2] += " Login ma mniej niż 6 znaków";
