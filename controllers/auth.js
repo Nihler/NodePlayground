@@ -118,7 +118,8 @@ exports.postRegister = (req, res, next) => {
     let userObj = {};
     userObj.name = req.body.name || "";
     userObj.surname = req.body.surname || "";
-    userObj.login = req.body.login || "";
+    if (req.body.login.toString().length < 6) userObj.login = "";
+    else userObj.login = req.body.login;
 
     console.log(userObj);
 
@@ -224,7 +225,8 @@ exports.postEditUser = (req, res, next) => {
     let userObj = {};
     userObj.name = req.body.name || "";
     userObj.surname = req.body.surname || "";
-    userObj.login = req.body.login || "";
+    if (req.body.login.toString().length < 6) userObj.login = "";
+    else userObj.login = req.body.login;
 
     console.log(userObj);
 

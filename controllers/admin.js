@@ -424,13 +424,15 @@ exports.postEditWorker = (req, res, next) => {
 
         console.log(info);
 
-        //let worker;
-        worker.name = req.body.imie || "";
-        worker.surname = req.body.nazwisko || "";
-        worker.surname2 = req.body.panienskie || "";
-        worker.sex = req.body.plec || "";
-        worker.email = req.body.email || "";
-        worker.postal = req.body.kod || "";
+        let workerObj = {};
+        workerObj.name = req.body.imie.toString();
+        workerObj.surname = req.body.nazwisko;
+        workerObj.sex = req.body.plec;
+        if (emailRegexp.test(req.body.email)) workerObj.email = req.body.email;
+        else workerObj.email = "";
+        workerObj.surname2 = req.body.panienskie;
+        if (codeRegexp.test(req.body.kod)) workerObj.postal = req.body.kod;
+        else workerObj.postal = "";
 
         res.render("admin/form", {
           info: info,
@@ -438,7 +440,7 @@ exports.postEditWorker = (req, res, next) => {
           docTitle: "Register",
           isEdit: true,
           level: temp,
-          worker: worker,
+          worker: workerObj,
           isRepeat: true
         });
       }
