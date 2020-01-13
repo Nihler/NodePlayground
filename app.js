@@ -73,7 +73,7 @@ Order.belongsToMany(Product, { through: OrderItem });
 
 //inicjalizacja serwera, polaczenia z baza danych + mock usera
 sequelize
-  .sync()
+  .sync({ force: true })
   .then(result => {
     return User.findByPk(1);
   })
