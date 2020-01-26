@@ -73,20 +73,7 @@ Order.belongsToMany(Product, { through: OrderItem });
 
 //inicjalizacja serwera, polaczenia z baza danych + mock usera
 sequelize
-  .sync({ force: true })
-  .then(result => {
-    return User.findByPk(1);
-  })
-  .then(user => {
-    if (!user) {
-      return User.create({ name: "User", email: "test@test.pl" });
-    }
-    return user;
-  })
-  .then(user => {
-    //console.log(user);
-    return user.createCart();
-  })
+  .sync()
   .then(cart => {
     app.listen(process.env.PORT || 3000);
   })
