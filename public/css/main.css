@@ -1,80 +1,36 @@
-.logo {
-  background-color: grey;
-  text-align: center;
+@import "login-register.css";
+@import "administrator.css";
+@import "student.css";
+
+html{
+    height:100%; 
+}
+body
+{
+    font-family: 'Lora', serif; 
+    min-height:100%; 
+    padding:0; 
+    margin:0; 
+    position:relative;
+    color:white;
+    background-image: linear-gradient(to right, 
+    #218c50, #008278, #00749d,
+     #005fad, #2d419c);
+}
+body::after {
+    content: '';
+    display: block;
+    height: 70px; 
+  }
+
+  .btn{ 
+    color: white;
+    min-height:40px;
+    border: none;
+  } 
+  
+
+/* gdzies do pliku z css studneta */
+.mp-form__input-container select {
   width: 100%;
-  height: 60px;
-}
-
-.container {
-  display: flex;
-  justify-content: space-between;
-}
-
-.main {
-  background-color: yellow;
-  float: left;
-  flex: 1 1 auto;
-  height: 400px;
-  padding: 15px;
-  margin: 15px;
-  /* max-width: calc(100vw - 300px); */
-}
-
-.main form {
-  padding: 12px 25% 12px 30%;
-}
-
-.main label {
-  display: block;
-}
-
-.left-nav {
-  flex: 0 0 auto;
-  width: 150px;
-}
-
-.right-nav {
-  flex: 0 0 auto;
-  position: initial;
-  width: 150px;
-  padding: 15px;
-  margin: 15px;
-  background-color: yellow;
-  height: 300px;
-}
-
-.list-left-nav {
-  list-style-type: none;
-  padding-left: 0;
-  padding-right: 0;
-  background-color: yellow;
-}
-
-.list-left-nav li {
-  border: 1px black solid;
-  padding: 10px;
-}
-
-.list-right-nav {
-  background-color: yellow;
-}
-
-.list-left-nav a {
-  text-decoration: none;
-}
-
-.end {
-  background-color: grey;
-  text-align: center;
-  width: 100%;
-  clear: both;
-  height: 50px;
-}
-
-.product-form {
-  background-color: yellow;
-}
-
-td {
-  border: 1px solid black;
 }

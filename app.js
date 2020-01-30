@@ -7,17 +7,22 @@ const session = require("express-session");
 const sequelize = require("./helpers/database");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
-const adminRoutes = require("./routes/admin");
+//Routes
 const authRoutes = require("./routes/auth");
+const adminRoutes = require("./routes/admin");
+const visitRoutes = require("./routes/visit");
 
+//Controllers
 const errorController = require("./controllers/error");
 
-const Worker = require("./models/worker");
+//Models
+const User = require("./models/user");
+const Visit = require("./models/visit");
 
 const app = express();
 
 // app.engine("hbs", handleBars({ layoutsDir: "views/layouts/", defaultLayout: "main-layout", extname: "hbs" })); //odpalenie hundlebarsa
-app.set("view engine", "ejs"); //dodanie template engine
+app.set("view engine", "pug"); //dodanie template engine
 app.set("views", "views");
 
 //middlewary - czyli funkcje kazde zadanie wywoluje
@@ -40,36 +45,30 @@ app.use(
 
 app.use(authRoutes);
 app.use(adminRoutes);
+app.use(visitRoutes);
 app.use(errorController.get404);
 
 app.use(function(req, res, next) {
-    if(req.cookies.sesja != undefined){
-      const value = req.cookies.sesja
-          res.cookieCounter = value.counter;
-          res.cookieArray = value.array;
-    } else {
-      res.cookieCounter = 0;
-          res.cookieArray = [];
-    }
-    next();
+  if (req.cookies.sesja != undefined) {
+    const value = req.cookies.sesja;
+    res.cookieCounter = value.counter;
+    res.cookieArray = value.array;
+  } else {
+    res.cookieCounter = 0;
+    res.cookieArray = [];
+  }
+  next();
 });
 
 //Relacje w bazie danych
 
-// Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
-// User.hasMany(Product);
-// User.hasOne(Cart);
-// Cart.belongsTo(User);
-// Cart.belongsToMany(Product, { through: CartItem });
-// Product.belongsToMany(Cart, { through: CartItem });
-// Order.belongsTo(User);
-// User.hasMany(Order);
-// Order.belongsToMany(Product, { through: OrderItem });
+Visit.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+User.hasMany(Visit);
 
 //inicjalizacja serwera, polaczenia z baza danych + mock usera
 sequelize
   .sync()
-  .then(cart => {
+  .then(() => {
     app.listen(process.env.PORT || 3001);
   })
   .catch(err => {

@@ -2,15 +2,16 @@ const Sequelize = require("sequelize");
 
 const sequelize = require("../helpers/database");
 
-const User = sequelize.define("user", {
+const Visit = sequelize.define("visit", {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true
   },
-  email: Sequelize.STRING,
-  password: Sequelize.STRING
+  type: Sequelize.STRING,
+  day: Sequelize.DATEONLY,
+  hour: Sequelize.TIME
 });
 
-module.exports = User;
+module.exports = Visit;

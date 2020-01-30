@@ -1,0 +1,48 @@
+extends layout
+block content
+    if(message)
+      h1 #{email}
+      h2 #{message}
+    .formVisitContainer
+      form.addVisitForm(method='POST' action='/addVisit' class="addVisitForm")
+        .formInput
+          .formInputIcon
+            img(src='../images/callendar.svg' width='24px' height='24px')
+          input.formInputField(type='date' name='time' required='' class="dataPicker")
+        .formInput
+          .formInputIcon
+            img(src='../images/clock.svg' width='24px' height='24px')
+          select.timePicker
+        .formInput
+          .formInputIcon
+            img(src='../images/category4.png' width='24px' height='24px')
+            //-input.formInputField(type='date' name='time' placeholder='Time' required='' class="dataPicker")
+          select.categorySelect
+            option(default value='') Wybierz kategorię
+            option(value='PodbicieLegitymacji') Podbicie Legitymacji
+            option(value='Stypendium') Stypendium
+            option(value='Inne') Inne
+
+
+
+        button.btnStudent.buttonStudent.formInputSubmit(type='submit') Dodaj do kolejki
+    
+
+
+
+    .visitsList
+      ul
+    button.collapsible.content Zarządzaj
+    a.logoutContainer(href='/logout') Wyloguj
+
+    .mp-footer
+      img.mp-footer__logo(src='../images/zutlogo.png' alt='zut logo')
+      h4.mp-footer__text Moze kolejka tu bedzie w stopce
+      .mp-footer__rightcorner
+
+     
+
+
+
+    
+    
