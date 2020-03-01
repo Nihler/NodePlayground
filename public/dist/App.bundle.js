@@ -946,6 +946,7 @@
         n = document.querySelector(".timePicker"),
         r = document.querySelector(".categorySelect");
       console.log(r.value);
+
       if (r.value) {
         o.a
           .post(
@@ -964,143 +965,81 @@
         alert("Musisz wybrać kategorię");
       }
     }
+    //Walidacja daty wizyty + wypełnianie opcji godzin
     function u(e) {
-      !(function() {
-        var e = document.querySelector(".timePicker");
-        e.innerHTML = "";
-        var t = document.querySelector(".dataPicker");
-        t.value, console.log(t.value);
-        var n = new Date(t.value),
-          r = n.getDay(),
-          o = [],
-          i = new Date(),
-          a = i.getDate();
-        console.log(n);
-        console.log("r");
-        console.log(r);
-        var c = i.getMonth() + 1;
-        console.log(c);
-        var s = n.getDate();
-        console.log(s);
-        var f = n.getMonth() + 1;
-        console.log(f);
-        var l = n.getYear();
-        console.log("DATA");
-        console.log(n.getDay());
-        if (n.getDay() == "0" || n.getDay() == "6") return alert("Dziekanat nie pracuje w weekend");
-        if ((console.log(l), f > c + 1))
-          window.alert("Wybierz max do 2 dni do przodu"), (t.valueAsDate = new Date()), u();
-        else if (f > c) {
-          switch (f) {
-            case 1:
-            case 2:
-              s += 31;
-              break;
-            case 3:
-              s += 29;
-              break;
-            case 4:
-              s += 31;
-              break;
-            case 5:
-              s += 30;
-              break;
-            case 6:
-              s += 31;
-              break;
-            case 7:
-              s += 30;
-              break;
-            case 8:
-            case 9:
-              s += 31;
-              break;
-            case 10:
-              s += 30;
-              break;
-            case 11:
-              s += 31;
-              break;
-            case 12:
-              s += 30;
-          }
-          s > a + 2 && (window.alert("Wybierz max do 2 dni do przodu"), (t.valueAsDate = new Date()), u());
-        } else s > a + 2 && (window.alert("Wybierz max do 2 dni do przodu"), (t.valueAsDate = new Date()), u());
-        if (new Date().setHours(0, 0, 0, 0) > n)
-          return alert("Nie można wybrac daty z przeszłości"), (t.valueAsDate = new Date()), void u();
-        if (r == 3) {
-          o = [
-            "13:00",
-            "13:15",
-            "13:30",
-            "13:45",
-            "14:00",
-            "14:15",
-            "14:30",
-            "14:45",
-            "15:00",
-            "15:15",
-            "15:30",
-            "15:45"
-          ];
-        } else if (r == 1 || r == 2 || r == 4 || r == 5) {
-          o = [
-            "10:00",
-            "10:15",
-            "10:30",
-            "10:45",
-            "11:00",
-            "11:15",
-            "11:30",
-            "11:45",
-            "12:00",
-            "12:15",
-            "12:30",
-            "12:45"
-          ];
-        }
-        // 3 == r
-        //   ? (o = [
-        //     "13:00",
-        //     "13:15",
-        //     "13:30",
-        //     "13:45",
-        //     "14:00",
-        //     "14:15",
-        //     "14:30",
-        //     "14:45",
-        //     "15:00",
-        //     "15:15",
-        //     "15:30",
-        //     "15:45"
-        //   ])
-        //   : 6 == r || 0 == r
-        //     ? (o = [])
-        //     : 1 == r ||
-        //       2 == r ||
-        //       4 == r ||
-        //       5 == r
-        //       ? (
-        //         (o = [
-        //           "10:00",
-        //           "10:15",
-        //           "10:30",
-        //           "10:45",
-        //           "11:00",
-        //           "11:15",
-        //           "11:30",
-        //           "11:45",
-        //           "12:00",
-        //           "12:15",
-        //           "12:30",
-        //           "12:45"
-        //         ])
-        //       );
-        for (var d = 0; d < o.length; d++) {
-          var p = document.createElement("option");
-          p.classList.add("timePickerOption"), (o.value = o[d]), (p.textContent = o[d]), e.appendChild(p);
-        }
-      })();
+      let timePicker = document.querySelector(".timePicker");
+      timePicker.innerHTML = "";
+
+      let datePicker = document.querySelector(".dataPicker");
+      let pickedDate = new Date(datePicker.value),
+        pickedDay = pickedDate.getDay(),
+        options = [],
+        current = new Date(Date.now()),
+        currentDay = current.getDate();
+
+      //jeżeli dzisiaj mamy piątek, można zarejestrować się na 3 dni później, czyli w poniedziałek
+      let counter = 2;
+      if (pickedDay == 5) counter = 3;
+
+      if (pickedDay == 0 || pickedDay == 6) { //sprawdzenie czy mamy weekend
+        options = [];
+        return alert("Dziekanat nie pracuje w weekend");
+      } else if (pickedDate.setHours(0, 0, 0, 0) - current.setHours(0, 0, 0, 0) > 86400000 * counter) { // sprawdzenie czy wybrana data mieści się w limicie
+        pickedDate = current;
+        pickedDay = pickedDate.getDay();
+        alert("Wybierz maksymalnie " + counter + " dni do przodu");
+      } else if (current.setHours(0, 0, 0, 0) > pickedDate.setHours(0, 0, 0, 0)) { //sprawdzenie czy data nie jest z przeszłości
+        pickedDate = current;
+        pickedDay = pickedDate.getDay();
+        alert("Nie można zerejsetrować się w przeszłości!");
+      }
+      
+      //wypełnianie opcji godzinowych zaleznie od dnia
+      if (pickedDay == 3) {
+        options = [
+          "13:00",
+          "13:15",
+          "13:30",
+          "13:45",
+          "14:00",
+          "14:15",
+          "14:30",
+          "14:45",
+          "15:00",
+          "15:15",
+          "15:30",
+          "15:45"
+        ];
+      } else if (pickedDay == 0) {
+        options = [];
+      } else {
+        options = [
+          "10:00",
+          "10:15",
+          "10:30",
+          "10:45",
+          "11:00",
+          "11:15",
+          "11:30",
+          "11:45",
+          "12:00",
+          "12:15",
+          "12:30",
+          "12:45"
+        ];
+      }
+
+      document.querySelectorAll(".timePickerOption").forEach(function(e) {
+        for (var n = 0; n < timePicker.length; n++) e.remove();
+      });
+      for (let i = 0; i < options.length; i++) {
+        let option = document.createElement("option");
+        option.classList.add("timePickerOption");
+        options.value = options[i];
+        option.textContent = options[i];
+        timePicker.appendChild(option);
+      }
+      // })();
       var t = document.querySelector(".dataPicker").value;
       o.a
         .get("/checkFreeVisitsHours/".concat(t))
